@@ -1,0 +1,15 @@
+/build/
+.settings/
+.metadata/
+gatling-test/
+WebContent/
+config/
+static/
+.classpath
+.gitattributes
+.project
+properties
+
+#Maven
+log/
+target/
