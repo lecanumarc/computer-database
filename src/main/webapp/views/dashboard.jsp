@@ -86,26 +86,26 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<c:if test="${pageIterator != null}">
+			<c:if test="${currentPage != null}">
 				<ul class="pagination">
-					<li><c:if test="${pageIterator > 0}">
-							<a href="dashboard?pageIterator=${pageIterator-1}"
+					<li><c:if test="${currentPage > 0}">
+							<a href="dashboard?currentPage=${currentPage-1}"
 								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 							</a>
 						</c:if>
 					</li>
 					<c:forEach var="i" begin="1" end="5">
 					
-					<c:if test="${pageIterator + i < maxPage }">
-							<li><a href="dashboard?pageIterator=${pageIterator + i}">
-							<c:out value="${pageIterator+i}"></c:out>
+					<c:if test="${currentPage + i < maxPage }">
+							<li><a href="dashboard?currentPage=${currentPage + i}">
+							<c:out value="${currentPage+i}"></c:out>
 							</a>
 						</li>
 						</c:if>
 						
 					</c:forEach>
-					<li><c:if test="${pageIterator + i < maxPage}">
-						<a href="dashboard?pageIterator=${pageIterator+1}"
+					<li><c:if test="${currentPage + i < maxPage}">
+						<a href="dashboard?currentPage=${currentPage+1}"
 							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 						</a>
 					</c:if>

@@ -26,9 +26,8 @@ public class Dashboard extends HttpServlet {
 	
 	private int queryRows = 20;//	Number of computer to print
 	private double maxPage = 1;	
-	private int currentPage = 1;	
 	private int queryOffset = 1;	
-	private int pageIterator = 1;	
+	private int currentPage = 1;	
 	
     public Dashboard() {
         super();
@@ -39,16 +38,15 @@ public class Dashboard extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//	get request parameters
 		if(request.getParameter("queryRows") != null) {
 			queryRows = Integer.parseInt(request.getParameter("queryRows"));
 		}
-		if(request.getParameter("pageIterator") != null) {
-			pageIterator = Integer.parseInt(request.getParameter("pageIterator"));
-			queryOffset = pageIterator * queryRows;
+		if(request.getParameter("currentPage") != null) {
+			currentPage = Integer.parseInt(request.getParameter("pageIterator"));
+			queryOffset = currentPage * queryRows;
 		}
 		else {
-			pageIterator = 0;
+			currentPage = 0;
 			queryOffset = 1;
 		}
 		
@@ -58,19 +56,12 @@ public class Dashboard extends HttpServlet {
 		maxPage = Math.ceil((rowNumber/(double)queryRows));
 		
 		request.setAttribute("maxPage", maxPage);
-		request.setAttribute("pageIterator", pageIterator);
+		request.setAttribute("pageIterator", currentPage);
 		request.setAttribute("queryOffset", queryOffset);
 		request.setAttribute("queryRows", queryRows);
-
-		System.out.println("currentPage : "+currentPage);
-		System.out.println("pageIterator : "+pageIterator);
-		System.out.println("queryOffset : "+queryOffset);
-		System.out.println("queryRows : "+queryRows);
-		System.out.println("maxPage : "+maxPage);
-		System.out.println("-------------------- : ");
-		
 		request.setAttribute("computerList", computerList);
 		request.setAttribute("rowNumber", rowNumber);
+		
 		request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
 	}
 
