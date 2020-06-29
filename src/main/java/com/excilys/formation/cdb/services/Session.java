@@ -162,7 +162,7 @@ public class Session {
 		page.addContent(Menu.getMessage(Menu.MessageType.ASK_COMPUTER_ID));
 		page.presentPage();
 		try {
-			int id = userScanner.nextInt();
+			Long id = new Long(userScanner.nextInt());
 			userCLI.deleteComputer(id);
 			page = new Page("Computer deletion", 0, "Computer " +id +" deleted.");
 			userScanner.nextLine(); //	Consume stored "\n"
@@ -214,7 +214,8 @@ public class Session {
 		page = new Page("Computer details", 1, Menu.getMessage(Menu.MessageType.ASK_COMPUTER_ID));
 		page.presentPage();
 		try {
-			page = new Page("Computer details", 1, userCLI.showComputerDetails(userScanner.nextInt()));
+			Long id = new Long(userScanner.nextInt());
+			page = new Page("Computer details", 1, userCLI.showComputerDetails(id));
 			page.presentPage();
 			userScanner.nextLine(); //	Consume stored "\n"
 

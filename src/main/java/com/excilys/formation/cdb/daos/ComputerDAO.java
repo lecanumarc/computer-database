@@ -17,11 +17,11 @@ public class ComputerDAO  {
 	private static final String CREATE_QRY = "insert into computer (id, name, introduced, discontinued, company_id) values (?,?,?,?,?)";
 	private static final String DELETE_QRY = "delete from computer where id = (?)";
 	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
-	private static final String FIND_BY_ID_QRY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE id = ?"; 
-	private static final String FIND_BY_NAME_QRY = "SELECT id, name, introduced, discontinued, company_id FROM computer WHERE name = ?"; 
+	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
+	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";
 	private static final String LIST_QRY = "SELECT id, name, introduced, discontinued, company_id FROM computer"; 
 	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
-	private static final String PAGINATED_LIST_QRY =  "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? OFFSET ? ";
+	private static final String PAGINATED_LIST_QRY =  "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ? OFFSET ? ";
 
 	private static Connector connector;
 
@@ -39,20 +39,20 @@ public class ComputerDAO  {
 			obj.validate();
 			st.setNull(1, java.sql.Types.INTEGER);
 			st.setString(2, obj.getName());
-			if(obj.getIntroDate() == null) {
+			if(obj.getintroduced() == null) {
 				st.setNull(3, java.sql.Types.DATE);
 			} else {
-				st.setDate(3, java.sql.Date.valueOf(obj.getIntroDate()));
+				st.setDate(3, java.sql.Date.valueOf(obj.getintroduced()));
 			}
-			if(obj.getDiscDate() == null) {
+			if(obj.getdiscontinued() == null) {
 				st.setNull(4, java.sql.Types.DATE);
 			} else {
-				st.setDate(4, java.sql.Date.valueOf(obj.getDiscDate())); 
+				st.setDate(4, java.sql.Date.valueOf(obj.getdiscontinued())); 
 			}
-			if(obj.getCompanyId() == 0) {
+			if(obj.getCompany() == null) {
 				st.setNull(5, java.sql.Types.INTEGER);
 			} else {
-				st.setInt(5, obj.getCompanyId());
+				st.setLong(5, obj.getCompany().getId());
 			}
 			st.executeUpdate();
 			return true;
@@ -62,10 +62,10 @@ public class ComputerDAO  {
 		return false;
 	}
 
-	public boolean delete(int id) {
+	public boolean delete(Long id) {
 		try (Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(DELETE_QRY)){
-			st.setInt(1, id);
+			st.setLong(1, id);
 			int count = st.executeUpdate();
 			System.out.println(count +" computer row(s) deleted.");
 			return true;
@@ -85,23 +85,23 @@ public class ComputerDAO  {
 				st.setString(1, obj.getName());
 			}
 
-			if(obj.getIntroDate() != null) {
-				st.setDate(2, java.sql.Date.valueOf(obj.getIntroDate()));
-			} else if(computer.getIntroDate() != null) {
-				st.setDate(2, java.sql.Date.valueOf(computer.getIntroDate()));
+			if(obj.getintroduced() != null) {
+				st.setDate(2, java.sql.Date.valueOf(obj.getintroduced()));
+			} else if(computer.getintroduced() != null) {
+				st.setDate(2, java.sql.Date.valueOf(computer.getintroduced()));
 			} else {
 				st.setNull(2, java.sql.Types.DATE);
 			}
 
-			if(obj.getDiscDate() != null) {
-				st.setDate(3, java.sql.Date.valueOf(obj.getDiscDate()));
-			} else if(computer.getDiscDate() != null) {
-				st.setDate(3, java.sql.Date.valueOf(computer.getDiscDate()));
+			if(obj.getdiscontinued() != null) {
+				st.setDate(3, java.sql.Date.valueOf(obj.getdiscontinued()));
+			} else if(computer.getdiscontinued() != null) {
+				st.setDate(3, java.sql.Date.valueOf(computer.getdiscontinued()));
 			} else {
 				st.setNull(3, java.sql.Types.DATE);
 			}
 
-			st.setInt(4, obj.getId());
+			st.setLong(4, obj.getId());
 			st.executeUpdate();
 			return true;
 		} catch (Exception e) {
@@ -110,11 +110,11 @@ public class ComputerDAO  {
 		return false;
 	}
 
-	public Computer findById(int id) {
-		Computer computer = new Computer();      
+	public Computer findById(Long id) {
+		Computer computer = null;      
 		try (Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_ID_QRY)){
-			st.setInt(1, id);
+			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
 			if(result.next())
 				computer = ComputerMapper.map(result);
@@ -125,7 +125,7 @@ public class ComputerDAO  {
 	}
 
 	public Computer findByName(String name) {
-		Computer computer = new Computer();      
+		Computer computer = null;      
 		try (Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
 			st.setString(1, name);

@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
+import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class UserScanner {
 	private static Scanner scanner;
@@ -53,10 +55,9 @@ public class UserScanner {
 	}
 
 	public Computer getComputer() throws Exception {
-		Computer computer = new Computer();
 
 		System.out.println("\nEnter computer id : ...");
-		int id = this.nextInt();
+		Long id = new Long(this.nextInt());
 		this.nextLine(); // consume "\n" from previous input
 
 		System.out.println("\nEnter computer name : ...");
@@ -81,13 +82,19 @@ public class UserScanner {
 			discDate = null;
 		}
 
+		
 		System.out.println("\nEnter company id : (integer)...");
-		int companyId = this.nextInt();
+		Long companyId = new Long(this.nextInt());
 		this.nextLine(); // consume "\n" from previous input
 
-		computer = new Computer(id, name, introDate,
-				discDate, companyId);
+		Company company = new Company(companyId ,"ds");
 
+		Computer computer = new ComputerBuilder(name)
+							.setId(id)
+							.setIntroduced(introDate)
+							.setDiscontinued(discDate)
+							.setCompany(company)
+							.build();
 		return computer;
 
 	}

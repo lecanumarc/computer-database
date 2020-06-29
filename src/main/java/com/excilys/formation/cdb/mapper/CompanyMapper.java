@@ -11,7 +11,7 @@ public class CompanyMapper {
 		Company company = new Company();
 		try {
 			company.setName(result.getString("name"));
-			company.setId(result.getInt("id"));
+			company.setId(result.getLong("id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

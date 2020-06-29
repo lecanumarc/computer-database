@@ -54,7 +54,7 @@ public class CompanyDAO {
 	public boolean create(Company obj) {
 		try(Connection connect = connector.getInstance(); 
 				PreparedStatement st = connect.prepareStatement(CREATE_QRY)){
-			st.setInt(1, obj.getId());
+			st.setLong(1, obj.getId());
 			st.setString(2, obj.getName());
 			int count = st.executeUpdate();
 			System.out.println(count +" company row(s) created.");
@@ -88,7 +88,7 @@ public class CompanyDAO {
 				st.setString(1, obj.getName());
 			}
 
-			st.setInt(2, obj.getId());
+			st.setLong(2, obj.getId());
 			int count = st.executeUpdate();
 			System.out.println(count +" company row(s) updated.");
 			return true;
@@ -98,11 +98,11 @@ public class CompanyDAO {
 		return false;
 	}
 
-	public Company findById(int id) {
+	public Company findById(Long id) {
 		Company company = new Company();      
 		try(Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
-			st.setInt(1, id);
+			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
 			if(result.next()) {
 				company = CompanyMapper.map(result);

@@ -2,36 +2,38 @@ package com.excilys.formation.cdb.pojos;
 
 public class Company {
 
-	int id;
+	Long id;
 	String name;
-	
+
 	public Company() {
 		super();
 	}
-	
-	public Company(int id, String name) {
+
+	public Company(Long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
-	
-	public int getId() {
+
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		if(name != null) {
+			this.name = name;
+		}
 	}
 
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
 	}
-	
-	
+
+
 }

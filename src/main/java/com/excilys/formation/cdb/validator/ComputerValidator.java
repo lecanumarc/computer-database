@@ -12,7 +12,7 @@ public class ComputerValidator {
 		if(computer.getName().isEmpty() || computer.getName() == null) {
 			throw new ComputerValidatorException("Name cannot be empty");
 		}
-		if(computer.getIntroDate() != null && computer.getDiscDate() != null && computer.getIntroDate().isAfter(computer.getDiscDate())) {
+		if(computer.getintroduced() != null && computer.getdiscontinued() != null && computer.getintroduced().isAfter(computer.getdiscontinued())) {
 			throw new ComputerValidatorException("Introduction date must not be greater than discontinuation date.");
 		}
 		

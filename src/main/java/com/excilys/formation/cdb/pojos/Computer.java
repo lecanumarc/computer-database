@@ -5,87 +5,92 @@ import java.time.LocalDate;
 import com.excilys.formation.cdb.validator.ComputerValidator;
 
 public class Computer {
-	private int id;
+	private Long id;
 	private String name; // mandatory
-	private LocalDate introDate; 
-	private LocalDate discDate; 
-	private int companyId;
+	private LocalDate introduced; 
+	private LocalDate discontinued; 
+	private Company company;
 
-	public Computer(int id, String name, LocalDate introDate, LocalDate discDate, int companyId) throws Exception {
+
+	private Computer(ComputerBuilder computerBuilder) {
 		super();
-		if(name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be empty");
-		}
-		if(introDate != null && discDate != null && introDate.compareTo(discDate) > 0) {
-			throw new IllegalArgumentException("Introduction date must not be greater than discontinuation date.");
-		}
-		this.id = id;
-		this.name = name;
-		if(introDate != null) {
-			this.introDate = introDate;
-		}
-		if(discDate != null) {
-			this.discDate = discDate;
-		}
-		this.companyId = companyId;
+		this.id = computerBuilder.id;
+		this.name = computerBuilder.name;
+		this.introduced = computerBuilder.introduced;
+		this.discontinued = computerBuilder.discontinued;
+		this.company = computerBuilder.company;
 	}
 
-	public Computer() {
-		super();
+	public Long getId() {
+		return id;
 	}
+
 
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) throws Exception {
-		if(name.isEmpty()) {
-			throw new IllegalArgumentException("Name cannot be empty");
-		}
-		this.name = name;
-	}
-	public LocalDate getIntroDate() {
-		return introDate;
-	}
-	public void setIntroDate(LocalDate introDate) throws Exception {
-		if(introDate != null && this.discDate != null && introDate.compareTo(this.discDate) > 0) {
-			throw new IllegalArgumentException("Introduction date must not be greater than discontinuation date.");
-		}
-		this.introDate = introDate;
-	}
-	public LocalDate getDiscDate() {
-		return discDate;
-	}
-	public void setDiscDate(LocalDate discDate) throws Exception {	
-		if(this.introDate != null && discDate != null && this.introDate.compareTo(discDate) > 0) {
-			throw new IllegalArgumentException("Introduction date must be greater than discontinuation date.");
 
-		}
-		this.discDate = discDate;
-	}
-	public int getCompanyId() {
-		return companyId;
-	}
-	public void setCompanyId(int companyId) throws Exception {
-		this.companyId = companyId;
+	public LocalDate getintroduced() {
+		return introduced;
 	}
 
-	public int getId() {
-		return id;
+
+	public LocalDate getdiscontinued() {
+		return discontinued;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+
+	public Company getCompany() {
+		return company;
 	}
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introDate=" + introDate + ", discDate=" + discDate
-				+ ", companyId=" + companyId + "]";
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company=" + company + "]";
 	}
-	
+
 	public void validate() {
 		ComputerValidator.validate(this);
 	}
 
+
+	public static class ComputerBuilder{
+		private Long id;
+		private String name; // mandatory
+		private LocalDate introduced; 
+		private LocalDate discontinued; 
+		private Company company;
+		
+		public  ComputerBuilder(String name) {
+			this.name=name;
+		}
+
+		public ComputerBuilder setId(Long id) {
+			this.id = id;
+			return this;
+		}
+
+		public ComputerBuilder setIntroduced(LocalDate introduced) {
+			this.introduced=introduced;
+			return this;
+		}
+
+		public ComputerBuilder setDiscontinued(LocalDate discontinued) {
+			this.discontinued = discontinued;
+			return this;
+		}
+
+		public ComputerBuilder setCompany(Company company) {
+			this.company = company;
+			return this;
+		}
+
+		public Computer build() {
+			Computer computer = new Computer(this);
+			return computer;
+		}
+
+	}
 
 }

@@ -23,19 +23,19 @@ public class ComputerDaoProvider {
 		return instance;
 	}
 	
-	public boolean create(Computer obj) {
+	public boolean add(Computer obj) {
 		return instanceDAO.create(obj);
 	}
 
-	public boolean delete(int id) {
+	public boolean delete(Long id) {
 		return instanceDAO.delete(id);
 	}
 
-	public boolean update(Computer obj) {
+	public boolean edit(Computer obj) {
 		return instanceDAO.update(obj);
 	}
 
-	public Computer findById(int id) {
+	public Computer findById(Long id) {
 		return instanceDAO.findById(id);
 	}
 
