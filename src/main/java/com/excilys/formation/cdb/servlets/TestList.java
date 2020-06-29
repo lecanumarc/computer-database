@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.formation.cdb.dto.ComputerDto;
+import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 
@@ -39,10 +40,12 @@ public class TestList extends HttpServlet {
 //		Computer computer = ComputerDaoProvider.getInstance().findById(id);
 //		PrintWriter out = response.getWriter();
 //		out.println(computer);
-		ComputerDaoProvider daoProvider = ComputerDaoProvider.getInstance();
-		ArrayList<Computer> computerList = daoProvider.listByPage(5, 5);
-		System.out.println(computerList);
-		request.setAttribute("computerList", computerList);
+		
+//		ComputerDaoProvider daoProvider = ComputerDaoProvider.getInstance();
+//		ArrayList<Computer> computerList = daoProvider.listByPage(5, 5);
+//		
+//		request.setAttribute("computerList", computerList);
+//		request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
 	}
 
 	/**

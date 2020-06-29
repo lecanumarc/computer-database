@@ -19,14 +19,13 @@ public class ComputerDto {
 		this.discontinued = discontinued;
 		this.company = company;
 	}
-	public ComputerDto(Long id, String name, String introduced, String discontinued, CompanyDto CompanyDto) {
+	
+	public ComputerDto(Long id, String name) {
 		super();
 		this.id=id;
 		this.name = name;
-		this.introduced = introduced;
-		this.discontinued = discontinued;
-		this.company = CompanyDto;
 	}
+	
 	public Long getId() {
 		return id;
 	}
