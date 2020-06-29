@@ -1,14 +1,13 @@
 <html>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <body>
 	<h2>Hello World!</h2>
-	<c:forEach items="${computerList}" var="computer">
+	<%-- <c:forEach items="${computerList}" var="computer">
 		<tr>
 			<td> <c:out value="${computer.id}" /></td>
 			<td> <c:out value="${computer.id}" /></td>
 			<td> <c:out value="${computer.name}" /></td>
 			<td> <c:out value="${computer.discontinued}" /></td>
 		</tr>
-	</c:forEach>
+	</c:forEach> --%>
 </body>
 </html>

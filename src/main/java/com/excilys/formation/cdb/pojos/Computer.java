@@ -16,9 +16,15 @@ public class Computer {
 		super();
 		this.id = computerBuilder.id;
 		this.name = computerBuilder.name;
-		this.introduced = computerBuilder.introduced;
-		this.discontinued = computerBuilder.discontinued;
-		this.company = computerBuilder.company;
+		if(computerBuilder.introduced != null) {
+			this.introduced = computerBuilder.introduced;
+		}
+		if(computerBuilder.discontinued != null) {
+			this.discontinued = computerBuilder.discontinued;
+		}
+		if(computerBuilder.company != null) {
+			this.company = computerBuilder.company;
+		}
 	}
 
 	public Long getId() {

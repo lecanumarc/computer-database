@@ -22,13 +22,21 @@ public class ComputerMapper {
 			company= new Company(result.getLong("company_id"), result.getString("company_name"));
 		}
 
-		Computer computer = new ComputerBuilder(result.getString("computer_name"))
-				.setId(result.getLong("computer_id"))
-				.setIntroduced(result.getDate("introduced").toLocalDate())
-				.setDiscontinued(result.getDate("discontinued").toLocalDate())
-				.setCompany(company)
-				.build();	
-		return computer;
+		ComputerBuilder computerBuilder = new ComputerBuilder(result.getString("computer_name"));
+		if(result.getLong("company_id") != 0) {
+			computerBuilder.setId(result.getLong("computer_id"));
+		}
+		if(company != null) {
+			computerBuilder.setCompany(company);
+		}
+		if(result.getDate("introduced") != null) {
+			computerBuilder.setIntroduced(result.getDate("introduced").toLocalDate());
+		}
+		if(result.getDate("discontinued")!= null) {
+			computerBuilder.setDiscontinued(result.getDate("discontinued").toLocalDate());
+		}
+		return computerBuilder.build();
+		
 	}
 
 	public static ComputerDto toDto(Computer computer ) throws SQLException {
@@ -36,13 +44,13 @@ public class ComputerMapper {
 		CompanyDto companyDto = new CompanyDto(computer.getCompany().getId(),
 				computer.getCompany().getName()
 				);	
-		
+
 		ComputerDto computerDto = new ComputerDto(computer.getId(),
 				computer.getName(),
 				computer.getintroduced().toString(),
 				computer.getdiscontinued().toString(),
 				companyDto);
-		
+
 		return computerDto;
 	}
 

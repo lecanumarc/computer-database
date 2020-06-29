@@ -41,8 +41,8 @@ public class TestList extends HttpServlet {
 //		out.println(computer);
 		ComputerDaoProvider daoProvider = ComputerDaoProvider.getInstance();
 		ArrayList<Computer> computerList = daoProvider.listByPage(5, 5);
+		System.out.println(computerList);
 		request.setAttribute("computerList", computerList);
-		//request.getRequestDispatcher("views/test.jsp").forward(request, response);
 	}
 
 	/**
