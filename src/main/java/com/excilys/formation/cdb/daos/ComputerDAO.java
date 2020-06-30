@@ -78,6 +78,7 @@ public class ComputerDAO  {
 
 	public boolean update(Computer obj) {
 		Computer computer = this.findById(obj.getId());
+		obj.validate();
 		try (Connection connect = connector.getInstance(); 
 				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
 			if(obj.getName().isEmpty()) {
@@ -90,7 +91,7 @@ public class ComputerDAO  {
 				if(obj.getintroduced().isBefore(computer.getdiscontinued())) {
 					st.setDate(2, java.sql.Date.valueOf(obj.getintroduced()));
 				} else {
-					throw new ComputerValidatorException.DateValidator("Introduction date must be before discontinuation date !");
+					throw new ComputerValidatorException.DateValidator();
 				}
 				
 			} else if(computer.getintroduced() != null) {
@@ -103,7 +104,7 @@ public class ComputerDAO  {
 				if(obj.getdiscontinued().isAfter(computer.getintroduced())) {
 					st.setDate(3, java.sql.Date.valueOf(obj.getdiscontinued()));
 				} else {
-					throw new ComputerValidatorException.DateValidator("Introduction date must be before discontinuation date !");
+					throw new ComputerValidatorException.DateValidator();
 				}
 			} else if(computer.getdiscontinued() != null) {
 				st.setDate(3, java.sql.Date.valueOf(computer.getdiscontinued()));
