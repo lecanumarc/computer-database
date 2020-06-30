@@ -42,7 +42,7 @@ public class Dashboard extends HttpServlet {
 			queryRows = Integer.parseInt(request.getParameter("queryRows"));
 		}
 		if(request.getParameter("currentPage") != null) {
-			currentPage = Integer.parseInt(request.getParameter("pageIterator"));
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 			queryOffset = currentPage * queryRows;
 		}
 		else {
@@ -56,7 +56,7 @@ public class Dashboard extends HttpServlet {
 		maxPage = Math.ceil((rowNumber/(double)queryRows));
 		
 		request.setAttribute("maxPage", maxPage);
-		request.setAttribute("pageIterator", currentPage);
+		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("queryOffset", queryOffset);
 		request.setAttribute("queryRows", queryRows);
 		request.setAttribute("computerList", computerList);
