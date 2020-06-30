@@ -7,6 +7,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,31 +20,38 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id: ${id}
                     </div>
                     <h1>Edit Computer</h1>
 
                     <form action="editComputer" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                        <input type="hidden" name="id" value="${computerToUpdate.id}" id="id"/> 
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="computerName" value="${computerToUpdate.name }" placeholder="Computer name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
+                                <input type="date" class="form-control" id="introduced" name="introduced" value="${computerToUpdate.introduced }" placeholder="Introduced date">
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
+                                <input type="date" class="form-control" id="discontinued" name="discontinued" value="${computerToUpdate.discontinued }" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
-                                <select class="form-control" id="companyId" >
-                                    <option value="0">--</option>
-                                </select>
-                            </div>            
+								<label for="companyId">Company</label> <select
+									class="form-control" id="companyId" name="companyId">
+									<c:forEach items="${companyList}" var="company">
+	                                	<c:if test="${company.id == computerToUpdate.company.id}">
+	                                		 <option value="${company.id}" selected><c:out value="${company.name}"></c:out></option>
+	                                	</c:if>
+	                                	<c:if test="${company.id != computerToUpdate.company.id}">
+  	                                   		 <option value="${company.id}"><c:out value="${company.name}"></c:out></option>
+										</c:if>
+	                                </c:forEach>
+								</select>
+							</div>
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">

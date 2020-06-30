@@ -16,7 +16,7 @@ public class ComputerDAO  {
 
 	private static final String CREATE_QRY = "insert into computer (id, name, introduced, discontinued, company_id) values (?,?,?,?,?)";
 	private static final String DELETE_QRY = "delete from computer where id = (?)";
-	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? where id = ?";
+	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? , company_id = ? where id = ?";
 	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
 	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";
 	private static final String LIST_QRY = "SELECT id, name, introduced, discontinued, company_id FROM computer"; 
@@ -101,7 +101,16 @@ public class ComputerDAO  {
 				st.setNull(3, java.sql.Types.DATE);
 			}
 
-			st.setLong(4, obj.getId());
+			if(obj.getCompany() != null && obj.getCompany().getId() != null)  {
+				st.setLong(4, obj.getCompany().getId());
+				System.out.println("idddd goood");
+			} else {
+
+				System.out.println("idddd baaad");
+				st.setLong(4, java.sql.Types.INTEGER);
+			}
+			
+			st.setLong(5, obj.getId());
 			st.executeUpdate();
 			return true;
 		} catch (Exception e) {
