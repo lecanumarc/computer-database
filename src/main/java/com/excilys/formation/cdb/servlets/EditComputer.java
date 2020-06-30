@@ -56,10 +56,8 @@ public class EditComputer extends HttpServlet {
 				request.getParameter("discontinued"),
 				companyDto);
 		computerDto.setId((Long.parseLong(request.getParameter("id"))));
-		System.out.println("dto id : "+computerDto.getId());
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			System.out.println(computer);
 			ComputerDaoProvider.getInstance().edit(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.excilys.formation.cdb.exceptions.ComputerValidatorException;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.ConnectionH2;
@@ -85,16 +86,25 @@ public class ComputerDAO  {
 				st.setString(1, obj.getName());
 			}
 
-			if(obj.getintroduced() != null) {
-				st.setDate(2, java.sql.Date.valueOf(obj.getintroduced()));
+			if(obj.getintroduced() != null && computer.getdiscontinued() != null ) {
+				if(obj.getintroduced().isBefore(computer.getdiscontinued())) {
+					st.setDate(2, java.sql.Date.valueOf(obj.getintroduced()));
+				} else {
+					throw new ComputerValidatorException.DateValidator("Introduction date must be before discontinuation date !");
+				}
+				
 			} else if(computer.getintroduced() != null) {
 				st.setDate(2, java.sql.Date.valueOf(computer.getintroduced()));
 			} else {
 				st.setNull(2, java.sql.Types.DATE);
 			}
 
-			if(obj.getdiscontinued() != null) {
-				st.setDate(3, java.sql.Date.valueOf(obj.getdiscontinued()));
+			if(obj.getdiscontinued() != null && computer.getintroduced() != null) {
+				if(obj.getdiscontinued().isAfter(computer.getintroduced())) {
+					st.setDate(3, java.sql.Date.valueOf(obj.getdiscontinued()));
+				} else {
+					throw new ComputerValidatorException.DateValidator("Introduction date must be before discontinuation date !");
+				}
 			} else if(computer.getdiscontinued() != null) {
 				st.setDate(3, java.sql.Date.valueOf(computer.getdiscontinued()));
 			} else {
@@ -103,13 +113,11 @@ public class ComputerDAO  {
 
 			if(obj.getCompany() != null && obj.getCompany().getId() != null)  {
 				st.setLong(4, obj.getCompany().getId());
-				System.out.println("idddd goood");
 			} else {
 
-				System.out.println("idddd baaad");
 				st.setLong(4, java.sql.Types.INTEGER);
 			}
-			
+
 			st.setLong(5, obj.getId());
 			st.executeUpdate();
 			return true;
