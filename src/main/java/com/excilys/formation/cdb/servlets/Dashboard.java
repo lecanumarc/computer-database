@@ -65,14 +65,4 @@ public class Dashboard extends HttpServlet {
 		request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
 	}
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		System.out.println(request.getParameter("selection"));
-		String[] computerIdsAsListString=request.getParameter("selection").split(",");
-		for(String idString:computerIdsAsListString) {
-			System.out.println(idString);
-		}
-		
-	}
-			
-
 }
