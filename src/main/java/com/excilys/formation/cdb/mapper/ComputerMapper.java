@@ -75,6 +75,7 @@ public class ComputerMapper {
 			if(computerDto.getCompany() != null) {
 				computerBuilder.setCompany(CompanyMapper.DtoToCompany(computerDto.getCompany()));
 			}
+			computer = computerBuilder.build();
 		}
 		
 		return computer;
