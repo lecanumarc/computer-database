@@ -114,8 +114,11 @@ public class ComputerDAO  {
 
 			if(obj.getCompany() != null && obj.getCompany().getId() != null)  {
 				st.setLong(4, obj.getCompany().getId());
+				System.out.println("obj company" +obj.getCompany());
+			} else if(computer.getCompany() != null && computer.getCompany().getId() != null) {
+				st.setLong(4, computer.getCompany().getId());
+				System.out.println("computer company" +computer.getCompany());
 			} else {
-
 				st.setLong(4, java.sql.Types.INTEGER);
 			}
 

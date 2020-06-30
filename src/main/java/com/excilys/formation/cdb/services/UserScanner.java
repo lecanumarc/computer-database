@@ -87,7 +87,7 @@ public class UserScanner {
 		Long companyId = new Long(this.nextInt());
 		this.nextLine(); // consume "\n" from previous input
 
-		Company company = new Company(companyId ,"ds");
+		Company company = new Company.CompanyBuilder().setId(companyId).build();
 
 		Computer computer = new ComputerBuilder(name)
 							.setId(id)

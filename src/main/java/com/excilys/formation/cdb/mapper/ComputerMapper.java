@@ -15,12 +15,13 @@ public class ComputerMapper {
 
 	public static Computer map(ResultSet result) throws SQLException {
 		Company company = null;
-		if(result.getLong("company_id") == 0) {
-		} else if (result.getString("company_name") == null) {
-			company = new Company(result.getLong("company_id"), "");
-		} else {
-			company= new Company(result.getLong("company_id"), result.getString("company_name"));
-		}
+		if(result.getLong("company_id") != 0) {
+			if (result.getString("company_name") == null) {
+				company = new Company.CompanyBuilder().setId(result.getLong("company_id")).build();
+			} else {
+				company =  new Company.CompanyBuilder().setId(result.getLong("company_id")).setName(result.getString("company_name")).build();
+			}
+		} 
 
 		ComputerBuilder computerBuilder = new ComputerBuilder(result.getString("computer_name")).setId(result.getLong("computer_id"));
 		if(company != null) {
@@ -33,7 +34,7 @@ public class ComputerMapper {
 			computerBuilder.setDiscontinued(result.getDate("discontinued").toLocalDate());
 		}
 		return computerBuilder.build();
-		
+
 	}
 
 	public static ComputerDto ComputerToDto(Computer computer) throws SQLException {
@@ -41,23 +42,23 @@ public class ComputerMapper {
 		ComputerDto computerDto = null;
 		if(computer != null) {
 			companyDto = CompanyMapper.CompanyToDto(computer.getCompany());
-			
+
 			computerDto = new ComputerDto(computer.getId(), computer.getName());
-			
+
 			if(computer.getintroduced() != null) {
 				computerDto.setIntroduced(computer.getintroduced().toString());
 			}
-			
+
 			if(computer.getdiscontinued() != null) {
 				computerDto.setIntroduced(computer.getintroduced().toString());
 			}
-			
+
 			computerDto.setCompany(companyDto);
 		}
 
 		return computerDto;
 	}
-	
+
 
 	public static Computer DtoToComputer(ComputerDto computerDto) throws SQLException {
 		Computer computer = null;
@@ -77,7 +78,7 @@ public class ComputerMapper {
 			}
 			computer = computerBuilder.build();
 		}
-		
+
 		return computer;
 	}
 

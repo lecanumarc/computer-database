@@ -9,7 +9,7 @@ public class ComputerValidator {
 		if(computer == null) {
 			throw new ComputerValidatorException ("Computer object is null");
 		}
-		if(computer.getName().isEmpty() || computer.getName() == null) {
+		if(computer.getName() == null || computer.getName().isEmpty()) {
 			throw new ComputerValidatorException("Name cannot be empty");
 		}
 		if(computer.getintroduced() != null && computer.getdiscontinued() != null && computer.getintroduced().isAfter(computer.getdiscontinued())) {
