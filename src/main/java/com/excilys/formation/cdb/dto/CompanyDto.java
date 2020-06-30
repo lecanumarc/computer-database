@@ -8,10 +8,9 @@ public class CompanyDto {
 	public CompanyDto() {
 	}
 	
-	public CompanyDto(Long id, String name) {
+	public CompanyDto(Long id) {
 		super();
 		this.id = id;
-		this.name = name;
 	}
 	
 	public Long getId() {

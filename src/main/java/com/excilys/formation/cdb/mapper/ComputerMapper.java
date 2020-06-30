@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
@@ -35,29 +36,48 @@ public class ComputerMapper {
 		
 	}
 
-	public static ComputerDto toDto(Computer computer) throws SQLException {
+	public static ComputerDto ComputerToDto(Computer computer) throws SQLException {
+		CompanyDto companyDto = null;
+		ComputerDto computerDto = null;
+		if(computer != null) {
+			companyDto = CompanyMapper.CompanyToDto(computer.getCompany());
+			
+			computerDto = new ComputerDto(computer.getId(), computer.getName());
+			
+			if(computer.getintroduced() != null) {
+				computerDto.setIntroduced(computer.getintroduced().toString());
+			}
+			
+			if(computer.getdiscontinued() != null) {
+				computerDto.setIntroduced(computer.getintroduced().toString());
+			}
+			
+			computerDto.setCompany(companyDto);
+		}
 
-		CompanyDto companyDto = new CompanyDto();
-		
-		if(computer.getCompany().getId() != 0) {
-			companyDto.setId(computer.getCompany().getId());
-			if(computer.getCompany().getName() != null) {
-				companyDto.setName(computer.getCompany().getName());
+		return computerDto;
+	}
+	
+
+	public static Computer DtoToComputer(ComputerDto computerDto) throws SQLException {
+		Computer computer = null;
+		if(computerDto != null) {
+			ComputerBuilder computerBuilder = new ComputerBuilder(computerDto.getName());
+			if(computerDto.getId() != null) {
+				computerBuilder.setId(computerDto.getId());
+			}
+			if(computerDto.getIntroduced() != null && !computerDto.getIntroduced().isEmpty()) {
+				computerBuilder.setIntroduced(LocalDate.parse(computerDto.getIntroduced()));
+			}
+			if(computerDto.getDiscontinued() != null && !computerDto.getDiscontinued().isEmpty()) {
+				computerBuilder.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued()));
+			}
+			if(computerDto.getCompany() != null) {
+				computerBuilder.setCompany(CompanyMapper.DtoToCompany(computerDto.getCompany()));
 			}
 		}
-				
-		ComputerDto computerDto = new ComputerDto(computer.getId(), computer.getName());
 		
-		if(computer.getintroduced() != null) {
-			computerDto.setIntroduced(computer.getintroduced().toString());
-		}
-		
-		if(computer.getdiscontinued() != null) {
-			computerDto.setIntroduced(computer.getintroduced().toString());
-		}
-		
-		computerDto.setCompany(companyDto);
-		return computerDto;
+		return computer;
 	}
 
 }
