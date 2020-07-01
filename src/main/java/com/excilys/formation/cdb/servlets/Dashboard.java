@@ -49,11 +49,18 @@ public class Dashboard extends HttpServlet {
 			currentPage = 0;
 			queryOffset = 1;
 		}
-		
+
+		System.out.println(request.getParameter("search"));
 		ComputerDaoProvider daoProvider = ComputerDaoProvider.getInstance();
-		ArrayList<Computer> computerList = daoProvider.listByPage(queryOffset - 1, queryRows);
+		ArrayList<Computer> computerList = null; daoProvider.listByPage(queryOffset - 1, queryRows);
 		int rowNumber = daoProvider.getNumberRows();
 		maxPage = Math.ceil((rowNumber/(double)queryRows));
+		
+		if(request.getParameter("search") != null) {
+			computerList = daoProvider.listByName(request.getParameter("search"));
+		} else {
+			computerList = daoProvider.listByPage(queryOffset - 1, queryRows);
+		}
 		
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("currentPage", currentPage);

@@ -46,5 +46,9 @@ public class ComputerDaoProvider {
 	public ArrayList<Computer> listByPage(int offset, int rows) {
 		return instanceDAO.listByPage(offset, rows);
 	}
+	
+	public ArrayList<Computer> listByName(String name) {
+		return instanceDAO.listNameLike(name);
+	}
 
 }

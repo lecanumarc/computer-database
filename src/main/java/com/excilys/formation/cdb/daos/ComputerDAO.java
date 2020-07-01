@@ -21,6 +21,7 @@ public class ComputerDAO  {
 	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
 	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";
 	private static final String LIST_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ";
+	private static final String LIST_NAME_LIKE_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id where computer.name like ?";
 	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
 	private static final String PAGINATED_LIST_QRY =  "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ? OFFSET ? ";
 
@@ -171,6 +172,24 @@ public class ComputerDAO  {
 			e.printStackTrace();
 		}
 
+		return list;
+	}
+	
+	public ArrayList<Computer> listNameLike(String name) {
+		ArrayList<Computer> list = new ArrayList<Computer>();
+		try (Connection connect = connector.getInstance();
+				PreparedStatement st = connect.prepareStatement(LIST_NAME_LIKE_QRY)){
+			String parameter = "%"+name+"%";
+			System.out.println(parameter);
+			st.setString(1, parameter);
+			ResultSet result = st.executeQuery();
+			while(result.next()) {
+				list.add(ComputerMapper.map(result));
+			}    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return list;
 	}
 
