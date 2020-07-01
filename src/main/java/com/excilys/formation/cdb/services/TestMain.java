@@ -20,9 +20,9 @@ public class TestMain {
 //        // using traditional API
 //        logger.debug("Temperature set to {}. Old temperature was {}.", newT, oldT);
 
-//        ComputerDAO dao = new ComputerDAO(false);
-//		Computer computer = new Computer();
-//		computer.setCompanyId(1);
+		ComputerDAO dao = new ComputerDAO(true);
+		Computer computer = dao.findById((long) 1);
+		System.out.println(computer);
 //		computer.setDiscDate(LocalDate.parse("1984-04-01"));
 //		computer.setIntroDate(LocalDate.parse("1983-12-01"));
 //		computer.setName("Computer IIIIII");
@@ -30,7 +30,7 @@ public class TestMain {
 //		boolean comp =  dao.create(computer);
 //		System.out.println(comp);
 		
-		Computer cpt ;
+//		Computer cpt ;
 //		try {
 //			cpt = new Computer(2000, "Computer name", null, null, 1);
 //			boolean var = dao.create(cpt);

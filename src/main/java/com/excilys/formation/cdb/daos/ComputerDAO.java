@@ -20,7 +20,7 @@ public class ComputerDAO  {
 	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? , company_id = ? where id = ?";
 	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
 	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";
-	private static final String LIST_QRY = "SELECT id, name, introduced, discontinued, company_id FROM computer"; 
+	private static final String LIST_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ";
 	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
 	private static final String PAGINATED_LIST_QRY =  "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ? OFFSET ? ";
 
@@ -77,8 +77,9 @@ public class ComputerDAO  {
 	}
 
 	public boolean update(Computer obj) {
-		Computer computer = this.findById(obj.getId());
 		obj.validate();
+		Computer computer = this.findById(obj.getId());
+		computer.validate();
 		try (Connection connect = connector.getInstance(); 
 				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
 			if(obj.getName().isEmpty()) {
@@ -114,10 +115,8 @@ public class ComputerDAO  {
 
 			if(obj.getCompany() != null && obj.getCompany().getId() != null)  {
 				st.setLong(4, obj.getCompany().getId());
-				System.out.println("obj company" +obj.getCompany());
 			} else if(computer.getCompany() != null && computer.getCompany().getId() != null) {
 				st.setLong(4, computer.getCompany().getId());
-				System.out.println("computer company" +computer.getCompany());
 			} else {
 				st.setLong(4, java.sql.Types.INTEGER);
 			}
@@ -137,8 +136,9 @@ public class ComputerDAO  {
 				PreparedStatement st = connect.prepareStatement(FIND_BY_ID_QRY)){
 			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
-			if(result.next())
+			if(result.next()) {
 				computer = ComputerMapper.map(result);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

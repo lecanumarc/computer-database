@@ -14,7 +14,6 @@ import com.excilys.formation.cdb.pojos.Computer;
 
 public class TestComputerDAO {
 
-
 	ComputerDAO computerDAO;
 
 	@Before
@@ -22,11 +21,6 @@ public class TestComputerDAO {
 		computerDAO = new ComputerDAO(true);
 	}
 
-	//	@After
-	//	public void tearDown() throws Exception {
-	//		connect = null;
-	//		computerDAO = null; 
-	//	}
 
 	@Test
 	public void testFindById() {
@@ -45,12 +39,12 @@ public class TestComputerDAO {
 		assertEquals("computer name is incorrect", "Apple III Plus", computer.getName());
 		assertEquals("computer introduction date is incorrect", LocalDate.parse("1983-12-01"), computer.getintroduced());
 		assertEquals("computer discontinuation is incorrect", LocalDate.parse("1984-04-01"), computer.getdiscontinued());
-		assertEquals("computer company id is incorrect", 1, computer.getCompany());
+		assertEquals("computer company id is incorrect", new Long(1), computer.getCompany().getId());
 	}
 
 	@Test
 	public void testCreate() throws Exception {
-		Computer computer = new Computer.ComputerBuilder("TestName").setId((long) 1).build();
+		Computer computer = new Computer.ComputerBuilder("TestName").setId(new Long(1)).build();
 		assertTrue("Computer was not created", computerDAO.create(computer));
 	}
 
@@ -62,7 +56,7 @@ public class TestComputerDAO {
 
 	@Test
 	public void testUpdate() throws Exception {	
-		Computer computer = new Computer.ComputerBuilder("TestName").setId((long) 17).build();
+		Computer computer = new Computer.ComputerBuilder("TestName").setId(new Long(17)).build();
 		assertTrue("Computer was not created", computerDAO.update(computer));
 	}
 
