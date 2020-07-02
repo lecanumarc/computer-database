@@ -42,6 +42,10 @@ public class ComputerDaoProvider {
 	public int getNumberRows() {
 		return instanceDAO.getNumberRows();
 	}
+	
+	public int getNumberRowsFiltered(String filter) {
+		return instanceDAO.getNumberRowsFiltered(filter);
+	}
 
 	public ArrayList<Computer> listByPage(int offset, int rows) {
 		return instanceDAO.listByPage(offset, rows);

@@ -17,6 +17,7 @@ public class ComputerDAO  {
 
 	//	sql query
 	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
+	private static final String COUNT_FILTERED_QRY = "SELECT COUNT(computer.id) as var FROM computer LEFT JOIN company on company.id = computer.company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?";
 	private static final String CREATE_QRY = "insert into computer (id, name, introduced, discontinued, company_id) values (?,?,?,?,?)";
 	private static final String DELETE_QRY = "delete from computer where id = (?)";
 	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? , company_id = ? where id = ?";
@@ -182,8 +183,28 @@ public class ComputerDAO  {
 		try (Connection connect = connector.getInstance();
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(COUNT_QRY);
-			if(result.next())
+			if(result.next()) {
 				count = result.getInt("var");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	public int getNumberRowsFiltered(String filter) {
+		int count = 0;
+		try (Connection connect = connector.getInstance();
+				PreparedStatement st = connect.prepareStatement(COUNT_FILTERED_QRY)){
+			filter =  "%"+filter+"%";
+			st.setString(1, filter);
+			st.setString(2, filter);
+			st.setString(3, filter);
+			st.setString(4, filter);
+			ResultSet result = st.executeQuery();
+			if(result.next()) {
+				count = result.getInt("var");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -211,19 +232,11 @@ public class ComputerDAO  {
 		try (Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY +FILTER_QRY +PAGINATE_QRY)){
 			// set filter
-			if(filter != null && !filter.isEmpty()) {
-				filter =  "%"+filter+"%";
-				st.setString(1, filter);
-				st.setString(2, filter);
-				st.setString(3, filter);
-				st.setString(4, filter);
-			} else {
-				st.setNull(1, java.sql.Types.VARCHAR);
-				st.setNull(2, java.sql.Types.VARCHAR);
-				st.setNull(3, java.sql.Types.VARCHAR);
-				st.setNull(4, java.sql.Types.VARCHAR);
-			}
-
+			filter =  "%"+filter+"%";
+			st.setString(1, filter);
+			st.setString(2, filter);
+			st.setString(3, filter);
+			st.setString(4, filter);
 			//	pagination
 			st.setInt(5, rows);
 			st.setInt(6, offset);

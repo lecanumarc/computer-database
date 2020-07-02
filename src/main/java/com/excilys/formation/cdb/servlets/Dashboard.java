@@ -32,6 +32,7 @@ public class Dashboard extends HttpServlet {
 	private double maxPage = 1;	
 	private int queryOffset = 1;	
 	private int currentPage = 1;	
+	private int rowNumber = 0;
 	private ArrayList<Computer> computerList = null;
 	ComputerDaoProvider daoProvider;
 
@@ -57,20 +58,25 @@ public class Dashboard extends HttpServlet {
 			queryOffset = 1;
 		}
 
-		int rowNumber = daoProvider.getNumberRows();
-		maxPage = Math.ceil((rowNumber/(double)queryRows));
-		
 		if(request.getParameter("search") != null && !request.getParameter("search").trim().isEmpty()) {
-			String filter = request.getParameter("search").trim();;
+			String filter = request.getParameter("search").trim();
 			if(request.getParameter("columnFiltered") != null && !request.getParameter("search").isEmpty()) {
 				filterList(request, response, filter);
 			} else {
 				computerList = daoProvider.listFiltered(queryOffset - 1, queryRows, filter);
 			}
+			rowNumber = daoProvider.getNumberRowsFiltered(filter);
+			System.out.println(filter);
+			System.out.println("row "+rowNumber);
 		} else {
 			computerList = daoProvider.listByPage(queryOffset - 1, queryRows);
+			rowNumber = daoProvider.getNumberRows();
 		}
 
+		
+		maxPage = Math.ceil((rowNumber/(double)queryRows));
+		
+		
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("queryOffset", queryOffset);
@@ -86,9 +92,6 @@ public class Dashboard extends HttpServlet {
 		String order = request.getParameter("order") != null && !request.getParameter("order").isEmpty() ? request.getParameter("order") : "ASC";
 		computerList = daoProvider.listOrdered(queryOffset - 1, queryRows, filter, column, order);
 		
-		request.setAttribute("computerList", computerList);
-
-		request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
 	}
 
 }
