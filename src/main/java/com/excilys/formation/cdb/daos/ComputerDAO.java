@@ -251,24 +251,36 @@ public class ComputerDAO  {
 		return list;
 	}
 
-	public ArrayList<Computer> listOrdered(int offset, int rows, String filter, String column, String order) {
+	public ArrayList<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
+		String order = ascOrder ? "ASC" : "DESC";
+		try (Connection connect = connector.getInstance();
+				PreparedStatement st = connect.prepareStatement(LIST_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
+			//	pagination
+			st.setInt(1, rows);
+			st.setInt(2, offset);
+
+			ResultSet result = st.executeQuery();
+			while(result.next()) {
+				list.add(ComputerMapper.map(result));
+			}    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
+		ArrayList<Computer> list = new ArrayList<Computer>();
+		String order = ascOrder ? "ASC" : "DESC";
 		try (Connection connect = connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
 			// set filter
-			if(filter != null && !filter.isEmpty()) {
-				filter =  "%"+filter+"%";
-				st.setString(1, filter);
-				st.setString(2, filter);
-				st.setString(3, filter);
-				st.setString(4, filter);
-			} else {
-				st.setNull(1, java.sql.Types.VARCHAR);
-				st.setNull(2, java.sql.Types.VARCHAR);
-				st.setNull(3, java.sql.Types.VARCHAR);
-				st.setNull(4, java.sql.Types.VARCHAR);
-			}
-
+			filter =  "%"+filter+"%";
+			st.setString(1, filter);
+			st.setString(2, filter);
+			st.setString(3, filter);
+			st.setString(4, filter);
 			//	pagination
 			st.setInt(5, rows);
 			st.setInt(6, offset);

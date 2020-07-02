@@ -51,8 +51,13 @@ public class ComputerDaoProvider {
 		return instanceDAO.listByPage(offset, rows);
 	}
 	
-	public ArrayList<Computer> listOrdered(int offset, int rows, String filter, String column, String order) {
-		return instanceDAO.listOrdered(offset, rows, filter, column, order);
+	public ArrayList<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
+		return instanceDAO.listOrderedAndFiltered(offset, rows, filter, column, ascOrder);
+	}
+	
+	
+	public ArrayList<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
+		return instanceDAO.listOrdered(offset, rows, column, ascOrder);
 	}
 	
 	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {

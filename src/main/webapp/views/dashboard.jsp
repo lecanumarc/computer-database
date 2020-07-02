@@ -56,28 +56,23 @@
 							</span>
 						</th>
 						<th>
-							 <p> Computer name
-	                         	<a href="DashboardComputerServlet?order-by=discontinued ASC">
-				            		<span class=" glyphicon glyphicon-sort-by-order">&nbsp &nbsp</span>
-				            	</a>
-				            	<a  href="DashboardComputerServlet?order-by=discontinued DESC">
-				            		<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
-				            	</a>	
-	                        </p> 
+							<a href="dashboard?columnOrder=computer.name">
+								 Computer name
+							</a>
+	                         	
 						</th>
 						<th>
-							<a href="dashboard?">
+							<a href="dashboard?columnOrder=introduced">
 								Introduced date
 							</a>
 						</th>
 						<th>
-							<!-- <span class="glyphicon glyphicon-sort-by-alphabet"> -->
-								<a href="dashboard?">
+							<a href="dashboard?columnOrder=discontinued">
 									Discontinued date
 								</a>
 						</th>
 						<th>
-							<a href="dashboard?">
+							<<a href="dashboard?columnOrder=company.name">
 								Company
 							</a>
 						</th>
