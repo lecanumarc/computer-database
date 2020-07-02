@@ -20,6 +20,7 @@ public class ComputerDAO  {
 	private static final String COUNT_FILTERED_QRY = "SELECT COUNT(computer.id) as var FROM computer LEFT JOIN company on company.id = computer.company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?";
 	private static final String CREATE_QRY = "insert into computer (id, name, introduced, discontinued, company_id) values (?,?,?,?,?)";
 	private static final String DELETE_QRY = "delete from computer where id = (?)";
+	public static final String DELETE_WITH_COMP_QRY = "delete from computer where company_id = (?)";
 	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? , company_id = ? where id = ?";
 	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
 	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";

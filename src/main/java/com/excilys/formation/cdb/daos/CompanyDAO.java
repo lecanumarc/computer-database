@@ -65,12 +65,21 @@ public class CompanyDAO {
 		return false;
 	}
 
-	public boolean delete(int id) {
+	public boolean delete(Long id) throws SQLException {
 		try(Connection connect = connector.getInstance(); 
-				PreparedStatement st = connect.prepareStatement(DELETE_QRY)){
-			st.setInt(1,id);
-			int count = st.executeUpdate();
-			System.out.println(count +" company row(s) deleted.");
+				PreparedStatement st1 = connect.prepareStatement(ComputerDAO.DELETE_WITH_COMP_QRY);
+				PreparedStatement st2 = connect.prepareStatement(DELETE_QRY);){
+			connect.setAutoCommit(false);
+			st1.setLong(1,id);
+			st2.setLong(1,id);
+			int res1 = st1.executeUpdate();
+			int res2 = st2.executeUpdate();
+			
+			if(res1 >= 0 && res2 == 1) {
+				connect.commit();
+			} else if(res2 == 0) {
+				connect.rollback();
+			}
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();

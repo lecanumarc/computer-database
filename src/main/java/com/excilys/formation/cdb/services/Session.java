@@ -170,6 +170,20 @@ public class Session {
 			e.printStackTrace();
 		}
 	}
+	
+	public void deleteCompany() {
+		state = State.Other;
+		page.addContent(Menu.getMessage(Menu.MessageType.ASK_COMPANY_ID));
+		page.presentPage();
+		try {
+			Long id = new Long(userScanner.nextInt());
+			userCLI.deleteComputer(id);
+			page = new Page("Company deletion", 0, "Company " +id +" deleted.");
+			userScanner.nextLine(); //	Consume stored "\n"
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void updateComputer() {
 		try {
@@ -270,6 +284,9 @@ public class Session {
 				break;
 			case '6':	
 				deleteComputer();
+				break;
+			case '7':	
+				deleteCompany();
 				break;
 			case 'q':
 				quit();

@@ -1,5 +1,6 @@
 package com.excilys.formation.cdb.services;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.excilys.formation.cdb.daos.CompanyDAO;
@@ -81,6 +82,10 @@ public class UserCLI {
 
 	public void deleteComputer(Long id) {
 		computerDAO.delete(id);
+	}
+	
+	public void deleteCompany(Long id) throws SQLException {
+		companyDAO.delete(id);
 	}
 
 	public int getComputerRows() {

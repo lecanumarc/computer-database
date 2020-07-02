@@ -7,18 +7,22 @@ public class Menu {
 		GOOD_BYE,
 		MAIN_MENU,
 		NAVIGUATION,
+		ASK_COMPANY_ID,
 		ASK_COMPUTER_DETAILS 
 	}
+	
 	private static final String MAIN_MENU_MSG = "- List computers (1) \n"
 			+ "- List companies (2) \n"
 			+ "- Show computer details (3) \n"
 			+ "- Create a computer (4) \n"
 			+ "- Update a computer (5) \n"
 			+ "- Delete a computer (6) \n"
+			+ "- Delete a company (7) \n"
 			+ "- Quit (q) \n";
+	
 	private static final String ASK_COMPUTER_ID_MSG = "\nPlease enter computer Id \n";
 	private static final String GOOD_BYE_MSG = "\n Goodbye ...\n ";
-	private static final String WELCOME_MSG = "\n Welcome, press enter to start ...\n ";
+	private static final String ASK_COMPANY_ID_MSG = "\n Please enter company Id  ...\n ";
 	private static final String NAVIGUATION_MSG = "\n (n) next page \t (p) previous page \t (m) main menu \t or enter page number. \n";
 	private static final String ASK_COMPUTER_DETAILS_MSG = "\n (n) next page \t (p) previous page \t (m) main menu \t or enter page number. \n";
 	 
@@ -39,6 +43,9 @@ public class Menu {
 			break;
 		case MAIN_MENU:
 			str += MAIN_MENU_MSG;
+			break;
+		case ASK_COMPANY_ID:
+			str += ASK_COMPANY_ID_MSG;
 			break;
 		default:
 			break;
