@@ -66,32 +66,34 @@ public class Dashboard extends HttpServlet {
 			rowNumber = daoProvider.getNumberRowsFiltered(filter);
 
 			if(request.getParameter("columnOrder") != null && !request.getParameter("columnOrder").isEmpty()) {
+				request.setAttribute("columnOrder", request.getParameter("columnOrder"));
 				setOrder(request, response);
 				computerList = daoProvider.listOrderedAndFiltered(queryOffset - 1, queryRows, filter, column, ascOrder);
 			} else {
 				computerList = daoProvider.listFiltered(queryOffset - 1, queryRows, filter);
 			}
 		} else {
-
+			filter = null;
 			if(request.getParameter("columnOrder") != null && !request.getParameter("columnOrder").isEmpty()) {
+				request.setAttribute("columnOrder", request.getParameter("columnOrder"));
 				setOrder(request, response);
 				computerList = daoProvider.listOrdered(queryOffset - 1, queryRows, column, ascOrder);
 			} else {
 				computerList = daoProvider.listByPage(queryOffset - 1, queryRows);
 				rowNumber = daoProvider.getNumberRows();
-
 			}
 		}
 
 		maxPage = Math.ceil((rowNumber/(double)queryRows));
-
 		request.setAttribute("maxPage", maxPage);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("queryOffset", queryOffset);
 		request.setAttribute("queryRows", queryRows);
 		request.setAttribute("computerList", computerList);
 		request.setAttribute("rowNumber", rowNumber);
-
+		if(filter != null) {
+			request.setAttribute("filter", filter);
+		}
 		request.getRequestDispatcher("views/dashboard.jsp").forward(request, response);
 	}
 
@@ -102,6 +104,7 @@ public class Dashboard extends HttpServlet {
 			column = request.getParameter("columnOrder");
 			ascOrder = true;
 		}
+		request.setAttribute("columnOrder", column);
 	}
 
 }

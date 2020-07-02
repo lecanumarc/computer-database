@@ -72,7 +72,7 @@
 								</a>
 						</th>
 						<th>
-							<<a href="dashboard?columnOrder=company.name">
+							<a href="dashboard?columnOrder=company.name">
 								Company
 							</a>
 						</th>
@@ -104,25 +104,35 @@
 			<c:if test="${currentPage != null}">
 				<ul class="pagination">
 					<li>
-						<c:if test="${currentPage > 0}">
-							<a href="dashboard?currentPage=${currentPage-1}"
+						<c:if test="${currentPage > 1}">
+							<a href="dashboard?currentPage=${currentPage-1}&search=${filter}&columnOrder=${columnOrder}"
 								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 							</a>
 						</c:if>
 					</li>
-					<c:forEach var="i" begin="1" end="5">
+					
+					<c:forEach var="i" begin="0" end="2">
+						<c:set var="decr" value="${2-i}"></c:set>
+						<c:if test="${currentPage - decr > 1 }">
+							<li>
+							<a href="dashboard?currentPage=${currentPage - decr}&search=${filter}&columnOrder=${columnOrder}">
+								<c:out value="${currentPage- decr}"></c:out>
+							</a>
+							</li>
+						</c:if>
+					</c:forEach>
+					<c:forEach var="i" begin="1" end="2">
 						<c:if test="${currentPage + i < maxPage }">
 							<li>
-							<a href="dashboard?currentPage=${currentPage + i}">
+							<a href="dashboard?currentPage=${currentPage + i}&search=${filter}&columnOrder=${columnOrder}">
 								<c:out value="${currentPage+i}"></c:out>
 							</a>
 							</li>
 						</c:if>
-
-					</c:forEach>
+					</c:forEach> 
 					<li>
 						<c:if test="${currentPage + i < maxPage}">
-							<a href="dashboard?currentPage=${currentPage+1}" aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
+							<a href="dashboard?currentPage=${currentPage+1}&search=${filter}&columnOrder=${columnOrder}" aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
 						</c:if>
 					</li>
 				</ul>
