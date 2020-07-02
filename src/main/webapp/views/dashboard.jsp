@@ -55,12 +55,32 @@
 								  </a>
 							</span>
 						</th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+						<th>
+							 <p> Computer name
+	                         	<a href="DashboardComputerServlet?order-by=discontinued ASC">
+				            		<span class=" glyphicon glyphicon-sort-by-order">&nbsp &nbsp</span>
+				            	</a>
+				            	<a  href="DashboardComputerServlet?order-by=discontinued DESC">
+				            		<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
+				            	</a>	
+	                        </p> 
+						</th>
+						<th>
+							<a href="dashboard?">
+								Introduced date
+							</a>
+						</th>
+						<th>
+							<!-- <span class="glyphicon glyphicon-sort-by-alphabet"> -->
+								<a href="dashboard?">
+									Discontinued date
+								</a>
+						</th>
+						<th>
+							<a href="dashboard?">
+								Company
+							</a>
+						</th>
 
 					</tr>
 				</thead>

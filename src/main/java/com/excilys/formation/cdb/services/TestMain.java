@@ -21,12 +21,12 @@ public class TestMain {
 //        // using traditional API
 //        logger.debug("Temperature set to {}. Old temperature was {}.", newT, oldT);
 
-		ComputerDAO dao = new ComputerDAO(true);
-		ArrayList<Computer> list = dao.listNameLike("app");
-		for(Computer computer : list) {
-			System.out.println(computer);
-		}
-		System.out.println(list.size());
+//		ComputerDAO dao = new ComputerDAO(true);
+//		ArrayList<Computer> list = dao.listNameLike("app");
+//		for(Computer computer : list) {
+//			System.out.println(computer);
+//		}
+//		System.out.println(list.size());
 //		computer.setDiscDate(LocalDate.parse("1984-04-01"));
 //		computer.setIntroDate(LocalDate.parse("1983-12-01"));
 //		computer.setName("Computer IIIIII");

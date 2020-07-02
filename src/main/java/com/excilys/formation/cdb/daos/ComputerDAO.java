@@ -15,15 +15,17 @@ import com.excilys.formation.cdb.services.Connector;
 
 public class ComputerDAO  {
 
+	//	sql query
+	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
 	private static final String CREATE_QRY = "insert into computer (id, name, introduced, discontinued, company_id) values (?,?,?,?,?)";
 	private static final String DELETE_QRY = "delete from computer where id = (?)";
 	private static final String UPDATE_QRY = "update computer set name = ?, introduced = ?, discontinued = ? , company_id = ? where id = ?";
 	private static final String FIND_BY_ID_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=?";
 	private static final String FIND_BY_NAME_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.name=?";
-	private static final String LIST_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id ";
-	private static final String LIST_NAME_LIKE_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id where computer.name like ?";
-	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM computer";
-	private static final String PAGINATED_LIST_QRY =  "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id LIMIT ? OFFSET ? ";
+	private static final String LIST_QRY = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id = computer.company_id ";
+	private static final String FILTER_QRY = "WHERE LOWER(computer.name) LIKE ? OR  LOWER(company.name) LIKE ? OR introduced LIKE ? OR discontinued LIKE ?";
+	private static final String PAGINATE_QRY =  "LIMIT ? OFFSET ? ";
+	private static final String ORDER_QRY =  "ORDER BY";
 
 	private static Connector connector;
 
@@ -95,7 +97,7 @@ public class ComputerDAO  {
 				} else {
 					throw new ComputerValidatorException.DateValidator();
 				}
-				
+
 			} else if(computer.getintroduced() != null) {
 				st.setDate(2, java.sql.Date.valueOf(computer.getintroduced()));
 			} else {
@@ -174,24 +176,6 @@ public class ComputerDAO  {
 
 		return list;
 	}
-	
-	public ArrayList<Computer> listNameLike(String name) {
-		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect = connector.getInstance();
-				PreparedStatement st = connect.prepareStatement(LIST_NAME_LIKE_QRY)){
-			String parameter = "%"+name+"%";
-			System.out.println(parameter);
-			st.setString(1, parameter);
-			ResultSet result = st.executeQuery();
-			while(result.next()) {
-				list.add(ComputerMapper.map(result));
-			}    
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
 
 	public int getNumberRows() {
 		int count = 0;
@@ -209,9 +193,73 @@ public class ComputerDAO  {
 	public ArrayList<Computer> listByPage(int offset, int rows) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		try (Connection connect = connector.getInstance();
-				PreparedStatement st = connect.prepareStatement(PAGINATED_LIST_QRY)){
+				PreparedStatement st = connect.prepareStatement(LIST_QRY + PAGINATE_QRY)){
 			st.setInt(1, rows);
 			st.setInt(2, offset);
+			ResultSet result = st.executeQuery();
+			while(result.next()) {
+				list.add(ComputerMapper.map(result));
+			}    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {
+		ArrayList<Computer> list = new ArrayList<Computer>();
+		try (Connection connect = connector.getInstance();
+				PreparedStatement st = connect.prepareStatement(LIST_QRY +FILTER_QRY +PAGINATE_QRY)){
+			// set filter
+			if(filter != null && !filter.isEmpty()) {
+				filter =  "%"+filter+"%";
+				st.setString(1, filter);
+				st.setString(2, filter);
+				st.setString(3, filter);
+				st.setString(4, filter);
+			} else {
+				st.setNull(1, java.sql.Types.VARCHAR);
+				st.setNull(2, java.sql.Types.VARCHAR);
+				st.setNull(3, java.sql.Types.VARCHAR);
+				st.setNull(4, java.sql.Types.VARCHAR);
+			}
+
+			//	pagination
+			st.setInt(5, rows);
+			st.setInt(6, offset);
+
+			ResultSet result = st.executeQuery();
+			while(result.next()) {
+				list.add(ComputerMapper.map(result));
+			}    
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<Computer> listOrdered(int offset, int rows, String filter, String column, String order) {
+		ArrayList<Computer> list = new ArrayList<Computer>();
+		try (Connection connect = connector.getInstance();
+				PreparedStatement st = connect.prepareStatement(LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
+			// set filter
+			if(filter != null && !filter.isEmpty()) {
+				filter =  "%"+filter+"%";
+				st.setString(1, filter);
+				st.setString(2, filter);
+				st.setString(3, filter);
+				st.setString(4, filter);
+			} else {
+				st.setNull(1, java.sql.Types.VARCHAR);
+				st.setNull(2, java.sql.Types.VARCHAR);
+				st.setNull(3, java.sql.Types.VARCHAR);
+				st.setNull(4, java.sql.Types.VARCHAR);
+			}
+
+			//	pagination
+			st.setInt(5, rows);
+			st.setInt(6, offset);
+
 			ResultSet result = st.executeQuery();
 			while(result.next()) {
 				list.add(ComputerMapper.map(result));

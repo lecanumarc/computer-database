@@ -47,8 +47,12 @@ public class ComputerDaoProvider {
 		return instanceDAO.listByPage(offset, rows);
 	}
 	
-	public ArrayList<Computer> listByName(String name) {
-		return instanceDAO.listNameLike(name);
+	public ArrayList<Computer> listOrdered(int offset, int rows, String filter, String column, String order) {
+		return instanceDAO.listOrdered(offset, rows, filter, column, order);
+	}
+	
+	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {
+		return instanceDAO.listFiltered(offset, rows, filter);
 	}
 
 }
