@@ -121,7 +121,7 @@
 							</li>
 						</c:if>
 					</c:forEach>
-					<c:forEach var="i" begin="1" end="2">
+					<c:forEach var="i" begin="1" end="3">
 						<c:if test="${currentPage + i < maxPage }">
 							<li>
 							<a href="dashboard?currentPage=${currentPage + i}&search=${filter}&columnOrder=${columnOrder}">
