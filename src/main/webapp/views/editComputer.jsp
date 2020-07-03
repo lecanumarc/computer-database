@@ -1,5 +1,5 @@
-<!DOCTYPE jsp>
-<jsp>
+<!DOCTYPE HTML>
+<html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,8 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<script src="js/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <body>
@@ -24,11 +26,11 @@
                     </div>
                     <h1>Edit Computer</h1>
 
-                    <form action="editComputer" method="POST">
+                    <form action="editComputer" method="POST" name="editComputerForm">
                         <input type="hidden" name="id" value="${computerToUpdate.id}" id="id"/> 
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
+                                <label for="computerName">Computer name</label> 
                                 <input type="text" class="form-control" id="computerName" name="computerName" value="${computerToUpdate.name }" placeholder="Computer name">
                             </div>
                             <div class="form-group">
@@ -63,5 +65,6 @@
             </div>
         </div>
     </section>
+    
 </body>
-</jsp>
+</html>

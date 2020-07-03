@@ -1,5 +1,5 @@
-<!DOCTYPE jsp>
-<jsp>
+<!DOCTYPE html>
+<html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,9 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="js/test.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -22,12 +25,11 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="addComputer" method="POST">
+					<form action="addComputer" method="POST" id="addComputerForm">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName" name="computerName"
-									placeholder="Computer name">
+								<label for="computerName">Computer name</label> 
+								<input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" >
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
@@ -58,5 +60,6 @@
 			</div>
 		</div>
 	</section>
+    
 </body>
-</jsp>
+</html>

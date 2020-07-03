@@ -1,5 +1,5 @@
-<!DOCTYPE jsp>
-<jsp>
+<!DOCTYPE HTML>
+<html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,9 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -26,7 +29,7 @@
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" /> 
-						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary"  href="dashboard?search=${search}"/>
+						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" href="dashboard?search=${search}"/>
 					</form>
 				</div>
 				<div class="pull-right">
@@ -153,12 +156,5 @@
 		</div>
 	</footer>
 	
-	
-	
-	
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
-
 </body>
-</jsp>
+</html>
