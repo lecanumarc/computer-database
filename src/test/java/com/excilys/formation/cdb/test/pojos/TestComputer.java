@@ -31,9 +31,30 @@ public class TestComputer {
 //	}
 //	
 	@Test
-	public void testSetEmptyName() {
+	public void testEmptyName() {
 		exception.expect(ComputerValidatorException.class);
+	    exception.expectMessage("Name cannot be empty");
 		computer = new ComputerBuilder("").build();
+	}
+	
+	@Test
+	public void testLesserDiscDate() {
+		exception.expect(ComputerValidatorException.class);
+	    exception.expectMessage("Introduction date must be before discontinuation date.");
+		computer = new ComputerBuilder("name")
+				.setIntroduced(LocalDate.now())
+				.setDiscontinued(LocalDate.now().minusYears(1))
+				.build();
+	}
+	
+	@Test
+	public void testGreaterIntroDate() {
+		exception.expect(ComputerValidatorException.class);
+		exception.expectMessage("Introduction date must be before discontinuation date.");
+		computer = new ComputerBuilder("name")
+				.setIntroduced(LocalDate.now().plusYears(1))
+				.setDiscontinued(LocalDate.now())
+				.build();
 	}
 	
 }
