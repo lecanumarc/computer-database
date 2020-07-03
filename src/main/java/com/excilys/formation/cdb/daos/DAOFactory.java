@@ -7,7 +7,7 @@ public class DAOFactory {
 	 * @return DAO
 	 */
 	public static ComputerDAO getComputerDAO(){
-		return new ComputerDAO(false);
+		return new ComputerDAO();
 	}
 
 	/**
@@ -15,7 +15,7 @@ public class DAOFactory {
 	 * @return DAO
 	 */
 	public static CompanyDAO getCompanyDAO(){
-		return new CompanyDAO(false);
+		return new CompanyDAO();
 	}
 
 }

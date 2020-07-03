@@ -18,7 +18,7 @@ public class TestComputerDAO {
 
 	@Before
 	public void setUp() throws Exception {
-		computerDAO = new ComputerDAO(true);
+		computerDAO = new ComputerDAO();
 	}
 
 

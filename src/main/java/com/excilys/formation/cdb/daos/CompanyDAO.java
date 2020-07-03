@@ -8,11 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.excilys.formation.cdb.mapper.CompanyMapper;
-import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Company;
-import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.services.ConnectionH2;
-import com.excilys.formation.cdb.services.ConnectionMySQL;
+import com.excilys.formation.cdb.services.DbConnection;
 import com.excilys.formation.cdb.services.Connector;
 
 public class CompanyDAO {
@@ -29,24 +26,20 @@ public class CompanyDAO {
 	private static CompanyDAO instance;
 	private static Connector connector;
 
-	public CompanyDAO(boolean h2) {
-		if(h2) {
-			connector =  new ConnectionH2();
-		} else {
-			connector =  new ConnectionMySQL();
-		}
+	public CompanyDAO() {
+		connector =  new DbConnection();
 	}
 
 	public static CompanyDAO getInstanceDB() {
 		if(instance == null) {
-			instance = new CompanyDAO(false);
+			instance = new CompanyDAO();
 		}
 		return instance;
 	}
 
 	public static CompanyDAO getInstanceh2() {
 		if(instance == null) {
-			instance = new CompanyDAO(true);
+			instance = new CompanyDAO();
 		}
 		return instance;
 	}
@@ -74,7 +67,7 @@ public class CompanyDAO {
 			st2.setLong(1,id);
 			int res1 = st1.executeUpdate();
 			int res2 = st2.executeUpdate();
-			
+
 			if(res1 >= 0 && res2 == 1) {
 				connect.commit();
 			} else if(res2 == 0) {

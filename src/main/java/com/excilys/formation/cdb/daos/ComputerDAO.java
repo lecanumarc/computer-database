@@ -6,11 +6,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.cdb.exceptions.ComputerValidatorException;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.services.ConnectionH2;
-import com.excilys.formation.cdb.services.ConnectionMySQL;
+import com.excilys.formation.cdb.services.DbConnection;
+import com.excilys.formation.cdb.services.TestMain;
 import com.excilys.formation.cdb.services.Connector;
 
 public class ComputerDAO  {
@@ -30,13 +33,10 @@ public class ComputerDAO  {
 	private static final String ORDER_QRY =  "ORDER BY";
 
 	private static Connector connector;
+	private static Logger logger = LoggerFactory.getLogger(TestMain.class);
 
-	public ComputerDAO(boolean h2) {
-		if(h2) {
-			connector =  new ConnectionH2();
-		} else {
-			connector =  new ConnectionMySQL();
-		}
+	public ComputerDAO() {
+		connector =  new DbConnection();
 	}
 
 	public boolean create(Computer obj) {
@@ -61,6 +61,7 @@ public class ComputerDAO  {
 				st.setLong(5, obj.getCompany().getId());
 			}
 			st.executeUpdate();
+			logger.debug("Computer created deleted.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,7 +74,7 @@ public class ComputerDAO  {
 				PreparedStatement st = connect.prepareStatement(DELETE_QRY)){
 			st.setLong(1, id);
 			int count = st.executeUpdate();
-			System.out.println(count +" computer row(s) deleted.");
+			logger.debug(count +" computer row(s) deleted.");
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -128,6 +129,7 @@ public class ComputerDAO  {
 
 			st.setLong(5, obj.getId());
 			st.executeUpdate();
+			logger.debug("Computer updated.");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,6 +149,8 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		logger.debug("Computer found by id.");
 		return computer;
 	}
 
@@ -161,6 +165,8 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		logger.debug("Computer found by name.");
 		return computer;
 	}
 
@@ -176,6 +182,7 @@ public class ComputerDAO  {
 			e.printStackTrace();
 		}
 
+		logger.debug(list.size() +"computer(s) listed.");
 		return list;
 	}
 
@@ -190,6 +197,8 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		logger.debug(count +"computer(s) rows(s) in database.");
 		return count;
 	}
 
@@ -209,6 +218,8 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
+		logger.debug(count +"computer(s) listed.");
 		return count;
 	}
 
@@ -225,6 +236,7 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		logger.debug(list.size() +"computer(s) listed.");
 		return list;
 	}
 
@@ -249,6 +261,7 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		logger.debug(list.size() +"computer(s) listed.");
 		return list;
 	}
 
@@ -268,6 +281,7 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		logger.debug(list.size() +"computer(s) listed.");
 		return list;
 	}
 
@@ -293,6 +307,7 @@ public class ComputerDAO  {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		logger.debug(list.size() +"computer(s) listed.");
 		return list;
 	}
 

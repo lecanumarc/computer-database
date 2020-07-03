@@ -6,8 +6,6 @@ import java.sql.Connection;
 
 import org.junit.Test;
 
-import com.excilys.formation.cdb.services.ConnectionH2;
-
 public class TestCompanyDAO {
 
 	@Test

@@ -60,7 +60,6 @@ public class Computer {
 		ComputerValidator.validate(this);
 	}
 
-
 	public static class ComputerBuilder{
 		private Long id;
 		private String name; // mandatory
@@ -94,6 +93,7 @@ public class Computer {
 
 		public Computer build() {
 			Computer computer = new Computer(this);
+			computer.validate();
 			return computer;
 		}
 

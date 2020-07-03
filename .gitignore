@@ -6,6 +6,7 @@ WebContent/
 config/
 static/
 .classpath
+.class
 .gitattributes
 .project
 properties
