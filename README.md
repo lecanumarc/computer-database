@@ -12,6 +12,7 @@ Computer database project
 Computer database sample project from Excilys. Java training
 
 #Installation
+
 Clone repository on git
 Run as server application on Eclipse IDE
 
