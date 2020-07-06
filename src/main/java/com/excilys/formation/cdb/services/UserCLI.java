@@ -95,9 +95,4 @@ public class UserCLI {
 	public int getCompanyRows() {
 		return companyDAO.getNumberRows();
 	}
-
-	public void disconnect() {
-		computerDAO.closeConnection();
-		companyDAO.closeConnection();
-	}
 }

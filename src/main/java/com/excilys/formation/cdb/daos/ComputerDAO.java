@@ -13,7 +13,6 @@ import com.excilys.formation.cdb.exceptions.ComputerValidatorException;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.DbConnection;
-import com.excilys.formation.cdb.services.TestMain;
 import com.excilys.formation.cdb.services.Connector;
 
 public class ComputerDAO  {
@@ -33,10 +32,11 @@ public class ComputerDAO  {
 	private static final String ORDER_QRY =  "ORDER BY";
 
 	private static Connector connector;
-	private static Logger logger = LoggerFactory.getLogger(TestMain.class);
+	private static ComputerDAO computerDAO;
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	public ComputerDAO() {
-		connector =  new DbConnection();
+		connector = new DbConnection();
 	}
 
 	public boolean create(Computer obj) {
@@ -61,23 +61,23 @@ public class ComputerDAO  {
 				st.setLong(5, obj.getCompany().getId());
 			}
 			st.executeUpdate();
-			logger.debug("Computer created deleted.");
+			logger.info("Computer created deleted.");
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error during computer creation : " +e.getMessage());
 		}
 		return false;
 	}
 
 	public boolean delete(Long id) {
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(DELETE_QRY)){
 			st.setLong(1, id);
 			int count = st.executeUpdate();
 			logger.debug(count +" computer row(s) deleted.");
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer deletion : " +e.getMessage());
 		}
 		return false;
 	}
@@ -86,7 +86,7 @@ public class ComputerDAO  {
 		obj.validate();
 		Computer computer = this.findById(obj.getId());
 		computer.validate();
-		try (Connection connect = connector.getInstance(); 
+		try (Connection connect =  connector.getInstance(); 
 				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
 			if(obj.getName().isEmpty()) {
 				st.setString(1, computer.getName());
@@ -129,17 +129,17 @@ public class ComputerDAO  {
 
 			st.setLong(5, obj.getId());
 			st.executeUpdate();
-			logger.debug("Computer updated.");
+			logger.info("Computer updated.");
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error during computer update : " +e.getMessage());
 		}
 		return false;
 	}
 
 	public Computer findById(Long id) {
 		Computer computer = null;      
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_ID_QRY)){
 			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
@@ -147,64 +147,63 @@ public class ComputerDAO  {
 				computer = ComputerMapper.map(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer find by id : " +e.getMessage());
 		}
-
-		logger.debug("Computer found by id.");
+		logger.info("Computer found by id.");
 		return computer;
 	}
 
 	public Computer findByName(String name) {
 		Computer computer = null;      
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
 			st.setString(1, name);
 			ResultSet result = st.executeQuery();
 			if(result.next())
 				computer = ComputerMapper.map(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			logger.error("Error during computer find by name : " +e.getMessage());
 
-		logger.debug("Computer found by name.");
+		}
+		logger.info("Computer found by name.");
 		return computer;
 	}
 
 	public ArrayList<Computer> list() {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(LIST_QRY);
 			while(result.next()) {
 				list.add(ComputerMapper.map(result));
 			}    
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer listing : " +e.getMessage());
 		}
 
-		logger.debug(list.size() +"computer(s) listed.");
+		logger.info(list.size() +"computer(s) listed.");
 		return list;
 	}
 
 	public int getNumberRows() {
 		int count = 0;
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(COUNT_QRY);
 			if(result.next()) {
 				count = result.getInt("var");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			logger.error("Error during computer counting : " +e.getMessage());
 
-		logger.debug(count +"computer(s) rows(s) in database.");
+		}
+		logger.info(count +"computer(s) rows(s) in database.");
 		return count;
 	}
 
 	public int getNumberRowsFiltered(String filter) {
 		int count = 0;
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(COUNT_FILTERED_QRY)){
 			filter =  "%"+filter+"%";
 			st.setString(1, filter);
@@ -216,16 +215,17 @@ public class ComputerDAO  {
 				count = result.getInt("var");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer counting with filter : " +e.getMessage());
+
 		}
 
-		logger.debug(count +"computer(s) listed.");
+		logger.info(count +"computer(s) listed.");
 		return count;
 	}
 
 	public ArrayList<Computer> listByPage(int offset, int rows) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + PAGINATE_QRY)){
 			st.setInt(1, rows);
 			st.setInt(2, offset);
@@ -234,15 +234,15 @@ public class ComputerDAO  {
 				list.add(ComputerMapper.map(result));
 			}    
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer listing by page : " +e.getMessage());
 		}
-		logger.debug(list.size() +"computer(s) listed.");
+		logger.info(list.size() +"computer(s) listed.");
 		return list;
 	}
 
 	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY +FILTER_QRY +PAGINATE_QRY)){
 			// set filter
 			filter =  "%"+filter+"%";
@@ -259,16 +259,17 @@ public class ComputerDAO  {
 				list.add(ComputerMapper.map(result));
 			}    
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer listing with filter : " +e.getMessage());
+
 		}
-		logger.debug(list.size() +"computer(s) listed.");
+		logger.info(list.size() +"computer(s) listed.");
 		return list;
 	}
 
 	public ArrayList<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		String order = ascOrder ? "ASC" : "DESC";
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
 			//	pagination
 			st.setInt(1, rows);
@@ -279,16 +280,16 @@ public class ComputerDAO  {
 				list.add(ComputerMapper.map(result));
 			}    
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer lsiting with order : " +e.getMessage());
 		}
-		logger.debug(list.size() +"computer(s) listed.");
+		logger.info(list.size() +"computer(s) listed.");
 		return list;
 	}
 
 	public ArrayList<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		String order = ascOrder ? "ASC" : "DESC";
-		try (Connection connect = connector.getInstance();
+		try (Connection connect =  connector.getInstance();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
 			// set filter
 			filter =  "%"+filter+"%";
@@ -305,15 +306,10 @@ public class ComputerDAO  {
 				list.add(ComputerMapper.map(result));
 			}    
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during computer listing with order and filter : " +e.getMessage());
 		}
-		logger.debug(list.size() +"computer(s) listed.");
+		logger.info(list.size() +"computer(s) listed.");
 		return list;
 	}
-
-	public void closeConnection() {
-		connector.close();
-	}
-
 
 }

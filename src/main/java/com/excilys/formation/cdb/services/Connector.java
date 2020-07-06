@@ -8,4 +8,5 @@ public interface Connector {
 	public abstract Connection getInstance() throws SQLException;
 
 	public abstract void close();
+	
 }
