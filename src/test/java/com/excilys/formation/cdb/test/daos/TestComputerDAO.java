@@ -20,8 +20,7 @@ public class TestComputerDAO {
 	public void setUp() throws Exception {
 		computerDAO = new ComputerDAO();
 	}
-
-
+	
 	@Test
 	public void testFindById() {
 		Computer computer = computerDAO.findById((long) 17);

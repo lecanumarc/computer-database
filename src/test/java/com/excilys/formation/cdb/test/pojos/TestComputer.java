@@ -30,6 +30,7 @@ public class TestComputer {
 //	    new RodneCislo("891415",dopocitej("891415"));
 //	}
 //	
+	
 	@Test
 	public void testEmptyName() {
 		exception.expect(ComputerValidatorException.class);

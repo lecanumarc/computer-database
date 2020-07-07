@@ -241,7 +241,6 @@ public class Session {
 	public void quit() {
 		page = getGoodbyePage();
 		page.presentPage();
-		userCLI.disconnect(); // close connection
 	}
 
 	public void run() {
