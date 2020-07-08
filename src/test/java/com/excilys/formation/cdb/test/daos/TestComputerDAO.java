@@ -6,21 +6,24 @@ import static org.junit.Assert.assertTrue;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
+import com.excilys.formation.cdb.configuration.SpringConfig;
 import com.excilys.formation.cdb.daos.ComputerDAO;
 import com.excilys.formation.cdb.pojos.Computer;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = SpringConfig.class, loader = AnnotationConfigContextLoader.class)
 public class TestComputerDAO {
 
+	@Autowired
 	ComputerDAO computerDAO;
 
-	@Before
-	public void setUp() throws Exception {
-		computerDAO = new ComputerDAO();
-	}
-	
 	@Test
 	public void testFindById() {
 		Computer computer = computerDAO.findById((long) 17);

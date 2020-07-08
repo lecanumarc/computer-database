@@ -15,7 +15,6 @@ public class DbConnection {
 	@Autowired
 	private DataSource ds;
 	
-	@Bean
 	public Connection getConnection() {
 		try {
 			return ds.getConnection();
