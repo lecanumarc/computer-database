@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
@@ -26,24 +30,25 @@ import com.excilys.formation.cdb.validator.ComputerValidator;
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public EditComputer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	@Autowired
+	CompanyDaoProvider companyDaoProvider; 
+	@Autowired
+	ComputerDaoProvider computerDaoProvider; 
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		// TODO Auto-generated method stub
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Company> companyList = CompanyDaoProvider.getInstance().listCompanies();
+		ArrayList<Company> companyList = companyDaoProvider.listCompanies();
 		request.setAttribute("companyList", companyList);
 
 		request.setAttribute("id", request.getParameter("id"));
 		Long id =  Long.parseLong(request.getParameter("id"));
-		Computer computerToUpdate = ComputerDaoProvider.getInstance().findById(id);
+		Computer computerToUpdate = computerDaoProvider.findById(id);
 		request.setAttribute("computerToUpdate", computerToUpdate);
 		request.getRequestDispatcher("views/editComputer.jsp").forward(request, response);
 	}
@@ -58,7 +63,7 @@ public class EditComputer extends HttpServlet {
 		computerDto.setId((Long.parseLong(request.getParameter("id"))));
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			ComputerDaoProvider.getInstance().edit(computer);
+			computerDaoProvider.edit(computer);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

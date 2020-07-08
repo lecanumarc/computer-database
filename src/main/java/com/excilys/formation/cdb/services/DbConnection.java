@@ -3,38 +3,28 @@ package com.excilys.formation.cdb.services;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
-public class DbConnection implements Connector{ 
-	private static Connection connect;
-	private static final String FILE_PATH =  "/datasource.properties";
-
-	private static HikariConfig config = new HikariConfig(FILE_PATH);
-	private static HikariDataSource ds = new HikariDataSource(config);
+@Component
+public class DbConnection { 
 	
-	public DbConnection(){
+	@Autowired
+	private DataSource ds;
+	
+	@Bean
+	public Connection getConnection() {
 		try {
-			connect = ds.getConnection();
+			return ds.getConnection();
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 
-	public Connection getInstance() throws SQLException{
-		if(connect == null || connect.isClosed()){
-			new DbConnection();
-		}
-		return connect;   
-	}  
-	
-	public void close() {
-		try {
-			connect.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 }

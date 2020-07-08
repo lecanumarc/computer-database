@@ -2,49 +2,40 @@ package com.excilys.formation.cdb.services;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.cdb.daos.CompanyDAO;
-import com.excilys.formation.cdb.daos.DAOFactory;
 import com.excilys.formation.cdb.pojos.Company;
 
+@Service
 public class CompanyDaoProvider {
 
-		public static CompanyDAO instanceDAO;
-		public static CompanyDaoProvider instance;
+	@Autowired
+	public CompanyDAO instanceDAO;
 
-		private CompanyDaoProvider() {
-			instanceDAO = DAOFactory.getCompanyDAO();
+	public boolean add(Company obj) {
+		return instanceDAO.create(obj);
+	}
 
-		}
+	public boolean edit(Company obj) {
+		return instanceDAO.update(obj);
+	}
 
-		public static CompanyDaoProvider getInstance() {
-			if(instance == null) {
-				instance = new CompanyDaoProvider();
-			}
-			return instance;
-		}
-		
-		public boolean add(Company obj) {
-			return instanceDAO.create(obj);
-		}
+	public Company findById(Long id) {
+		return instanceDAO.findById(id);
+	}
 
-		public boolean edit(Company obj) {
-			return instanceDAO.update(obj);
-		}
+	public int getNumberRows() {
+		return instanceDAO.getNumberRows();
+	}
 
-		public Company findById(Long id) {
-			return instanceDAO.findById(id);
-		}
+	public ArrayList<Company> listByPage(int offset, int rows) {
+		return instanceDAO.listByPage(offset, rows);
+	}
 
-		public int getNumberRows() {
-			return instanceDAO.getNumberRows();
-		}
-
-		public ArrayList<Company> listByPage(int offset, int rows) {
-			return instanceDAO.listByPage(offset, rows);
-		}
-		
-		public ArrayList<Company> listCompanies() {
-			return instanceDAO.list();
-		}
+	public ArrayList<Company> listCompanies() {
+		return instanceDAO.list();
+	}
 
 }

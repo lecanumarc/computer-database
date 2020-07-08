@@ -8,13 +8,17 @@ import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.cdb.exceptions.ComputerValidatorException;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.services.DbConnection;
 import com.excilys.formation.cdb.services.Connector;
+import com.excilys.formation.cdb.services.DbConnection;
 
+
+@Repository
 public class ComputerDAO  {
 
 	//	sql query
@@ -31,16 +35,13 @@ public class ComputerDAO  {
 	private static final String PAGINATE_QRY =  "LIMIT ? OFFSET ? ";
 	private static final String ORDER_QRY =  "ORDER BY";
 
-	private static Connector connector;
-	private static ComputerDAO computerDAO;
+	@Autowired
+	private DbConnection connector;
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-	public ComputerDAO() {
-		connector = new DbConnection();
-	}
-
 	public boolean create(Computer obj) {
-		try (Connection connect = connector.getInstance();
+		try (Connection connect = connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(CREATE_QRY)){
 			obj.validate();
 			st.setNull(1, java.sql.Types.INTEGER);
@@ -70,7 +71,7 @@ public class ComputerDAO  {
 	}
 
 	public boolean delete(Long id) {
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(DELETE_QRY)){
 			st.setLong(1, id);
 			int count = st.executeUpdate();
@@ -86,7 +87,7 @@ public class ComputerDAO  {
 		obj.validate();
 		Computer computer = this.findById(obj.getId());
 		computer.validate();
-		try (Connection connect =  connector.getInstance(); 
+		try (Connection connect =  connector.getConnection(); 
 				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
 			if(obj.getName().isEmpty()) {
 				st.setString(1, computer.getName());
@@ -139,7 +140,7 @@ public class ComputerDAO  {
 
 	public Computer findById(Long id) {
 		Computer computer = null;      
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_ID_QRY)){
 			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
@@ -155,7 +156,7 @@ public class ComputerDAO  {
 
 	public Computer findByName(String name) {
 		Computer computer = null;      
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
 			st.setString(1, name);
 			ResultSet result = st.executeQuery();
@@ -171,7 +172,7 @@ public class ComputerDAO  {
 
 	public ArrayList<Computer> list() {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(LIST_QRY);
 			while(result.next()) {
@@ -187,7 +188,7 @@ public class ComputerDAO  {
 
 	public int getNumberRows() {
 		int count = 0;
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(COUNT_QRY);
 			if(result.next()) {
@@ -203,7 +204,7 @@ public class ComputerDAO  {
 
 	public int getNumberRowsFiltered(String filter) {
 		int count = 0;
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(COUNT_FILTERED_QRY)){
 			filter =  "%"+filter+"%";
 			st.setString(1, filter);
@@ -225,7 +226,7 @@ public class ComputerDAO  {
 
 	public ArrayList<Computer> listByPage(int offset, int rows) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + PAGINATE_QRY)){
 			st.setInt(1, rows);
 			st.setInt(2, offset);
@@ -242,7 +243,7 @@ public class ComputerDAO  {
 
 	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY +FILTER_QRY +PAGINATE_QRY)){
 			// set filter
 			filter =  "%"+filter+"%";
@@ -269,7 +270,7 @@ public class ComputerDAO  {
 	public ArrayList<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		String order = ascOrder ? "ASC" : "DESC";
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
 			//	pagination
 			st.setInt(1, rows);
@@ -289,7 +290,7 @@ public class ComputerDAO  {
 	public ArrayList<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		String order = ascOrder ? "ASC" : "DESC";
-		try (Connection connect =  connector.getInstance();
+		try (Connection connect =  connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY)){
 			// set filter
 			filter =  "%"+filter+"%";

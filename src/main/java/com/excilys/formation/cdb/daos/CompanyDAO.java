@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.formation.cdb.mapper.CompanyMapper;
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.services.DbConnection;
-import com.excilys.formation.cdb.services.Connector;
 
+@Repository
 public class CompanyDAO {
 
 	private static final String CREATE_QRY = "insert into company value (?,?)";
@@ -23,29 +26,11 @@ public class CompanyDAO {
 	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM company";
 	private static final String PAGINATED_LIST_QRY =  "SELECT id, name FROM computer LIMIT ? OFFSET ? ";
 
-	private static CompanyDAO instance;
-	private static Connector connector;
-
-	public CompanyDAO() {
-		connector =  new DbConnection();
-	}
-
-	public static CompanyDAO getInstanceDB() {
-		if(instance == null) {
-			instance = new CompanyDAO();
-		}
-		return instance;
-	}
-
-	public static CompanyDAO getInstanceh2() {
-		if(instance == null) {
-			instance = new CompanyDAO();
-		}
-		return instance;
-	}
+	@Autowired
+	private DbConnection connector;
 
 	public boolean create(Company obj) {
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				PreparedStatement st = connect.prepareStatement(CREATE_QRY)){
 			st.setLong(1, obj.getId());
 			st.setString(2, obj.getName());
@@ -59,7 +44,7 @@ public class CompanyDAO {
 	}
 
 	public boolean delete(Long id) throws SQLException {
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				PreparedStatement st1 = connect.prepareStatement(ComputerDAO.DELETE_WITH_COMP_QRY);
 				PreparedStatement st2 = connect.prepareStatement(DELETE_QRY);){
 			connect.setAutoCommit(false);
@@ -82,7 +67,7 @@ public class CompanyDAO {
 
 	public boolean update(Company obj) {
 		Company company = this.findById(obj.getId());
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
 			if(obj.getName().isEmpty()) {
 				st.setString(1, company.getName());
@@ -102,7 +87,7 @@ public class CompanyDAO {
 
 	public Company findById(Long id) {
 		Company company = new Company();      
-		try(Connection connect = connector.getInstance();
+		try(Connection connect = connector.getConnection();
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
 			st.setLong(1, id);
 			ResultSet result = st.executeQuery();
@@ -117,7 +102,7 @@ public class CompanyDAO {
 
 	public Company findByName(String name) {
 		Company company = new Company();      
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
 			st.setString(1, name);
 			ResultSet result = st.executeQuery();
@@ -132,7 +117,7 @@ public class CompanyDAO {
 
 	public ArrayList<Company> list() {
 		ArrayList<Company> list = new ArrayList<Company>();
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(LIST_QRY);
 			while(result.next()) {
@@ -147,7 +132,7 @@ public class CompanyDAO {
 
 	public ArrayList<Company> listByPage(int offset, int rows) {
 		ArrayList<Company> list = new ArrayList<Company>();
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				PreparedStatement st = connect.prepareStatement(PAGINATED_LIST_QRY)){
 			st.setInt(1, rows);
 			st.setInt(2, offset);
@@ -163,7 +148,7 @@ public class CompanyDAO {
 
 	public int getNumberRows() {
 		int count = 0;
-		try(Connection connect = connector.getInstance(); 
+		try(Connection connect = connector.getConnection(); 
 				Statement st = connect.createStatement()){
 			ResultSet result = st.executeQuery(COUNT_QRY);
 			if(result.next())
@@ -172,10 +157,6 @@ public class CompanyDAO {
 			e.printStackTrace();
 		}
 		return count;
-	}
-
-	public void closeConnection() {
-		connector.close();
 	}
 
 }

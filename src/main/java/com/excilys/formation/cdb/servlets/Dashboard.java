@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
@@ -37,13 +41,15 @@ public class Dashboard extends HttpServlet {
 	private String column = null;
 	private boolean ascOrder = false;
 	private ArrayList<Computer> computerList = null;
-	ComputerDaoProvider daoProvider;
+	
+	@Autowired
+	ComputerDaoProvider computerDaoProvider;
 
-	public Dashboard() {
-		super();
-		daoProvider = ComputerDaoProvider.getInstance();
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -63,24 +69,24 @@ public class Dashboard extends HttpServlet {
 
 		if(request.getParameter("search") != null && !request.getParameter("search").trim().isEmpty()) {
 			filter = request.getParameter("search").trim();
-			rowNumber = daoProvider.getNumberRowsFiltered(filter);
+			rowNumber = computerDaoProvider.getNumberRowsFiltered(filter);
 
 			if(request.getParameter("columnOrder") != null && !request.getParameter("columnOrder").isEmpty()) {
 				request.setAttribute("columnOrder", request.getParameter("columnOrder"));
 				setOrder(request, response);
-				computerList = daoProvider.listOrderedAndFiltered(queryOffset - 1, queryRows, filter, column, ascOrder);
+				computerList = computerDaoProvider.listOrderedAndFiltered(queryOffset - 1, queryRows, filter, column, ascOrder);
 			} else {
-				computerList = daoProvider.listFiltered(queryOffset - 1, queryRows, filter);
+				computerList = computerDaoProvider.listFiltered(queryOffset - 1, queryRows, filter);
 			}
 		} else {
 			filter = null;
 			if(request.getParameter("columnOrder") != null && !request.getParameter("columnOrder").isEmpty()) {
 				request.setAttribute("columnOrder", request.getParameter("columnOrder"));
 				setOrder(request, response);
-				computerList = daoProvider.listOrdered(queryOffset - 1, queryRows, column, ascOrder);
+				computerList = computerDaoProvider.listOrdered(queryOffset - 1, queryRows, column, ascOrder);
 			} else {
-				computerList = daoProvider.listByPage(queryOffset - 1, queryRows);
-				rowNumber = daoProvider.getNumberRows();
+				computerList = computerDaoProvider.listByPage(queryOffset - 1, queryRows);
+				rowNumber = computerDaoProvider.getNumberRows();
 			}
 		}
 

@@ -3,21 +3,24 @@ package com.excilys.formation.cdb.services;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.cdb.daos.CompanyDAO;
 import com.excilys.formation.cdb.daos.ComputerDAO;
-import com.excilys.formation.cdb.daos.DAOFactory;
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
 
+@Component
 public class UserCLI {
 
 	private static UserCLI instance;
+	@Autowired
 	private static ComputerDAO computerDAO;
+	@Autowired
 	private static CompanyDAO companyDAO;
 
 	private UserCLI() {
-		computerDAO = DAOFactory.getComputerDAO();
-		companyDAO = DAOFactory.getCompanyDAO();
 	}
 
 	public static UserCLI getInstance() {
