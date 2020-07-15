@@ -5,8 +5,10 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,15 +17,17 @@ public class DbConnection {
 	@Autowired
 	private DataSource ds;
 	
-	public Connection getConnection() {
-		try {
-			return ds.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private static Connection connect;
+	private static Logger logger = LoggerFactory.getLogger(DbConnection.class);
+	
+	public Connection getConnection() throws SQLException {
+		if(connect == null || connect.isClosed()) {
+			try {
+				connect = ds.getConnection();
+			} catch(SQLException eSQL) {
+				logger.error("Error connection to DB",eSQL);
+			}
 		}
-		return null;
+		return connect;
 	}
-
-
 }

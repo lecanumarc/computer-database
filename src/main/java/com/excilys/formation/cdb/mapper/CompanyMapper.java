@@ -3,9 +3,13 @@ package com.excilys.formation.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.pojos.Company;
+import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
+import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class CompanyMapper {
 
@@ -57,5 +61,16 @@ public class CompanyMapper {
 		return company;
 	}
 
-
+	class CompanyRowMapper implements RowMapper<Company> {
+	    @Override
+	    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    	Company company = new CompanyBuilder()
+	    			.setName(rs.getString("name"))
+	    			.setId(rs.getLong("id"))
+	    			.build();
+	        return company;
+	    }
+	}
+	
+	
 }

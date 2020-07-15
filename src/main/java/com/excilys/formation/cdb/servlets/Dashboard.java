@@ -1,7 +1,7 @@
 package com.excilys.formation.cdb.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public class Dashboard extends HttpServlet {
 	private String filter = null;
 	private String column = null;
 	private boolean ascOrder = false;
-	private ArrayList<Computer> computerList = null;
+	private List<Computer> computerList = null;
 	
 	@Autowired
 	ComputerDaoProvider computerDaoProvider;
