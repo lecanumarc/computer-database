@@ -4,13 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
+
 import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class ComputerMapper {
@@ -47,12 +45,12 @@ public class ComputerMapper {
 
 			computerDto = new ComputerDto(computer.getId(), computer.getName());
 
-			if(computer.getIntroduced() != null) {
-				computerDto.setIntroduced(computer.getIntroduced().toString());
+			if(computer.getintroduced() != null) {
+				computerDto.setIntroduced(computer.getintroduced().toString());
 			}
 
-			if(computer.getDiscontinued() != null) {
-				computerDto.setIntroduced(computer.getIntroduced().toString());
+			if(computer.getdiscontinued() != null) {
+				computerDto.setIntroduced(computer.getintroduced().toString());
 			}
 
 			computerDto.setCompany(companyDto);
@@ -60,6 +58,7 @@ public class ComputerMapper {
 
 		return computerDto;
 	}
+
 
 	public static Computer DtoToComputer(ComputerDto computerDto) throws SQLException {
 		Computer computer = null;
@@ -82,5 +81,5 @@ public class ComputerMapper {
 
 		return computer;
 	}
-	
+
 }

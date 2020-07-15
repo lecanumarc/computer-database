@@ -8,6 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -26,7 +27,6 @@
 		<spring-web-version>5.2.6.RELEASE</spring-web-version>
 		<spring-context-version>5.2.6.RELEASE</spring-context-version>
 		<spring-test-version>5.2.6.RELEASE</spring-test-version>
-		<spring-jdbc-version>5.2.6.RELEASE</spring-jdbc-version>
 	</properties>
 
 
@@ -111,12 +111,6 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring-test-version}</version>
 			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-jdbc-version}</version>
 		</dependency>
 
 	</dependencies>

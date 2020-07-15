@@ -1,6 +1,6 @@
 package com.excilys.formation.cdb.services;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,20 +38,20 @@ public class ComputerDaoProvider {
 		return instanceDAO.getNumberRowsFiltered(filter);
 	}
 
-	public List<Computer> listByPage(int offset, int rows) {
+	public ArrayList<Computer> listByPage(int offset, int rows) {
 		return instanceDAO.listByPage(offset, rows);
 	}
 
-	public List<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
+	public ArrayList<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
 		return instanceDAO.listOrderedAndFiltered(offset, rows, filter, column, ascOrder);
 	}
 
 
-	public List<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
+	public ArrayList<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
 		return instanceDAO.listOrdered(offset, rows, column, ascOrder);
 	}
 
-	public List<Computer> listFiltered(int offset, int rows, String filter) {
+	public ArrayList<Computer> listFiltered(int offset, int rows, String filter) {
 		return instanceDAO.listFiltered(offset, rows, filter);
 	}
 

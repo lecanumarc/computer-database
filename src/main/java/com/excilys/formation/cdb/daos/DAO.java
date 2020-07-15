@@ -1,62 +1,61 @@
 package com.excilys.formation.cdb.daos;
 
+import java.sql.Connection;
 import java.util.List;
-import javax.sql.DataSource;
 
-public interface DAO<T> {
+public abstract class DAO<T> {
+  protected Connection connect = null;
+   
+  public DAO(Connection conn){
+    this.connect = conn;
+  }
+   
+  /**
+  * Méthode de création
+  * @param obj
+  * @return boolean 
+  */
+  public abstract boolean create(T obj);
 
-	/** 
-	 * This is the method to be used to initialize
-	 * database resources ie. connection.
-	 */
-	public void setDataSource(DataSource ds);
+  /**
+  * Méthode pour effacer
+  * @param obj
+  * @return boolean 
+  */
+  public abstract boolean delete(int id);
 
-	/**
-	 * Mï¿½thode de crï¿½ation
-	 * @param obj
-	 * @return boolean 
-	 */
-	public boolean create(T obj);
+  /**
+  * Méthode de mise à jour
+  * @param obj
+  * @return boolean
+  */
+  public abstract boolean update(T obj);
 
-	/**
-	 * Mï¿½thode pour effacer
-	 * @param obj
-	 * @return boolean 
-	 */
-	public boolean delete(Long id);
+  /**
+  * Méthode de recherche des informations
+  * @param id
+  * @return T
+  */
+  public abstract T findById(int id);
+  
+  /**
+   * Méthode de recherche des informations
+   * @param id
+   * @return T
+   */
+   public abstract T findByName(String name);
+  
+  /**
+   * Méthode de recherche des informations
+   * @return int
+   */
+  public abstract int getNumberRows();
 
-	/**
-	 * Mï¿½thode de mise ï¿½ jour
-	 * @param obj
-	 * @return boolean
-	 */
-	public boolean update(T obj);
-
-	/**
-	 * Mï¿½thode de recherche des informations
-	 * @param id
-	 * @return T
-	 */
-	public T findById(Long id);
-
-	/**
-	 * Mï¿½thode de recherche des informations
-	 * @param id
-	 * @return T
-	 */
-	public T findByName(String name);
-
-	/**
-	 * Mï¿½thode de recherche des informations
-	 * @return int
-	 */
-	public int getNumberRows();
-
-	/**
-	 * Mï¿½thode de listing
-	 * @param id
-	 * @return T
-	 */
-	public List<T> list();
-
+  /**
+  * Méthode de listing
+  * @param id
+  * @return T
+  */
+  public abstract List<T> list();
+  
 }
