@@ -36,12 +36,12 @@ public class Computer {
 		return name;
 	}
 
-	public LocalDate getintroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
 
-	public LocalDate getdiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
@@ -68,7 +68,7 @@ public class Computer {
 		private Company company;
 		
 		public  ComputerBuilder(String name) {
-			this.name=name;
+			this.name = name;
 		}
 
 		public ComputerBuilder setId(Long id) {
@@ -77,7 +77,7 @@ public class Computer {
 		}
 
 		public ComputerBuilder setIntroduced(LocalDate introduced) {
-			this.introduced=introduced;
+			this.introduced = introduced;
 			return this;
 		}
 

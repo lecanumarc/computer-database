@@ -1,7 +1,8 @@
 package com.excilys.formation.cdb.services;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,9 +17,9 @@ public class UserCLI {
 
 	private static UserCLI instance;
 	@Autowired
-	private static ComputerDAO computerDAO;
+	private ComputerDAO computerDAO;
 	@Autowired
-	private static CompanyDAO companyDAO;
+	private  CompanyDAO companyDAO;
 
 	private UserCLI() {
 	}
@@ -31,7 +32,7 @@ public class UserCLI {
 	}
 
 	public String listComputers() {
-		ArrayList<Computer> list = computerDAO.list();
+		List<Computer> list = computerDAO.list();
 		StringBuilder str = new StringBuilder(); 
 
 		for(Object obj : list) {
@@ -41,7 +42,7 @@ public class UserCLI {
 	}
 
 	public String listCompanies() {
-		ArrayList<Company> list = companyDAO.list();
+		List<Company> list = companyDAO.list();
 		StringBuilder str = new StringBuilder(); 
 
 		for(Object obj : list) {
@@ -51,7 +52,7 @@ public class UserCLI {
 	}
 
 	public String listComputersByPage(int offset, int rows) {
-		ArrayList<Computer> list = computerDAO.listByPage(offset, rows);
+		List<Computer> list = computerDAO.listByPage(offset, rows);
 		StringBuilder str = new StringBuilder(); 
 
 		for(Object obj : list) {
@@ -61,7 +62,7 @@ public class UserCLI {
 	}
 
 	public String listCompanyByPage(int offset, int rows) {
-		ArrayList<Company> list = companyDAO.listByPage(offset, rows);
+		List<Company> list = companyDAO.listByPage(offset, rows);
 		StringBuilder str = new StringBuilder(); 
 
 		for(Object obj : list) {
