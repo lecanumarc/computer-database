@@ -1,161 +1,130 @@
 package com.excilys.formation.cdb.daos;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.sql.Types;
+import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.cdb.mapper.CompanyMapper;
+import com.excilys.formation.cdb.mapper.CompanyRowMapper;
 import com.excilys.formation.cdb.pojos.Company;
-import com.excilys.formation.cdb.services.DbConnection;
 
 @Repository
-public class CompanyDAO {
+public class CompanyDAO implements DAO<Company> {
 
-	private static final String CREATE_QRY = "insert into company value (?,?)";
-	private static final String DELETE_QRY = "delete from company where id = (?)";
-	private static final String UPDATE_QRY  = "update company set name = ? where id = ?";
-	private static final String FIND_BY_ID_QRY = "SELECT id, name FROM company WHERE id = ?"; 
-	private static final String FIND_BY_NAME_QRY = "SELECT id, name FROM company WHERE name = ?"; 
-	private static final String LIST_QRY = "SELECT id, name FROM company"; 
-	private static final String COUNT_QRY = "SELECT COUNT(*) as var FROM company";
-	private static final String PAGINATED_LIST_QRY =  "SELECT id, name FROM computer LIMIT ? OFFSET ? ";
+	private static final String CREATE_QRY = "insert into company value (:id, :name)";
+	private static final String DELETE_QRY = "delete from company where id = :id";
+	private static final String UPDATE_QRY  = "update company set name = :name where id = :id";
+	private static final String FIND_BY_ID_QRY = "SELECT id as company_id, name as company_name FROM company WHERE id = :id"; 
+	private static final String FIND_BY_NAME_QRY = "SELECT id as company_id, name as company_name FROM company WHERE name = :name"; 
+	private static final String LIST_QRY = "SELECT id as company_id, name as company_name  FROM company"; 
+	private static final String COUNT_QRY = "SELECT COUNT(id) FROM company";
+	private static final String PAGINATED_LIST_QRY =  "SELECT id as company_id, name as company_name FROM company LIMIT :limit OFFSET :offset";
+
+	private DataSource dataSource;
+	NamedParameterJdbcTemplate namedJdbcTemplate;
+	JdbcTemplate jdbcTemplate;
+
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	@Autowired
-	private DbConnection connector;
+	public CompanyDAO(DataSource dataSource) {
+		this.dataSource = dataSource;
+		this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 
+	}
+
+	@Override
 	public boolean create(Company obj) {
-		try(Connection connect = connector.getConnection(); 
-				PreparedStatement st = connect.prepareStatement(CREATE_QRY)){
-			st.setLong(1, obj.getId());
-			st.setString(2, obj.getName());
-			int count = st.executeUpdate();
-			System.out.println(count +" company row(s) created.");
-			return true;
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", obj.getId());
+		params.addValue("name", obj.getName());
+		jdbcTemplate.update(CREATE_QRY, params);
+		return true;
+	}
+	
+	@Override
+	public boolean delete(Long id) {
+		Connection connection;
+		try {
+			connection = dataSource.getConnection();
+			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during connection initialization");
 		}
-		return false;
+	
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		jdbcTemplate.update(ComputerDAO.DELETE_WITH_COMP_QRY, params);
+		jdbcTemplate.update(DELETE_QRY, params);
+		try {
+			dataSource.getConnection().commit();
+		} catch (SQLException e) {
+			logger.error("Error during connection commit");
+		}
+		return true;
 	}
 
-	public boolean delete(Long id) throws SQLException {
-		try(Connection connect = connector.getConnection(); 
-				PreparedStatement st1 = connect.prepareStatement(ComputerDAO.DELETE_WITH_COMP_QRY);
-				PreparedStatement st2 = connect.prepareStatement(DELETE_QRY);){
-			connect.setAutoCommit(false);
-			st1.setLong(1,id);
-			st2.setLong(1,id);
-			int res1 = st1.executeUpdate();
-			int res2 = st2.executeUpdate();
-
-			if(res1 >= 0 && res2 == 1) {
-				connect.commit();
-			} else if(res2 == 0) {
-				connect.rollback();
-			}
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
+	@Override
 	public boolean update(Company obj) {
 		Company company = this.findById(obj.getId());
-		try(Connection connect = connector.getConnection(); 
-				PreparedStatement st = connect.prepareStatement(UPDATE_QRY)){
-			if(obj.getName().isEmpty()) {
-				st.setString(1, company.getName());
-			} else {
-				st.setString(1, obj.getName());
-			}
-
-			st.setLong(2, obj.getId());
-			int count = st.executeUpdate();
-			System.out.println(count +" company row(s) updated.");
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		if(obj.getName() != null && !obj.getName().isEmpty()) {
+			params.addValue("name", obj.getName(), Types.VARCHAR);
+		} else {
+			params.addValue("name", company.getName(), Types.VARCHAR);
 		}
-		return false;
+		params.addValue("id", obj.getId());
+		jdbcTemplate.update(UPDATE_QRY, params);
+		return true;
 	}
 
+	@Override
 	public Company findById(Long id) {
-		Company company = new Company();      
-		try(Connection connect = connector.getConnection();
-				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
-			st.setLong(1, id);
-			ResultSet result = st.executeQuery();
-			if(result.next()) {
-				company = CompanyMapper.map(result);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", id);
+		Company company  = namedJdbcTemplate.queryForObject(
+				FIND_BY_ID_QRY, params, new CompanyRowMapper());   
 		return company;
 	}
 
+	@Override
 	public Company findByName(String name) {
-		Company company = new Company();      
-		try(Connection connect = connector.getConnection(); 
-				PreparedStatement st = connect.prepareStatement(FIND_BY_NAME_QRY)){
-			st.setString(1, name);
-			ResultSet result = st.executeQuery();
-			if(result.next()) {
-				company = CompanyMapper.map(result);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("name", name);
+		Company company  = namedJdbcTemplate.queryForObject(
+				FIND_BY_NAME_QRY, params, new CompanyRowMapper());   
 		return company;
 	}
-
-	public ArrayList<Company> list() {
-		ArrayList<Company> list = new ArrayList<Company>();
-		try(Connection connect = connector.getConnection(); 
-				Statement st = connect.createStatement()){
-			ResultSet result = st.executeQuery(LIST_QRY);
-			while(result.next()) {
-				list.add(CompanyMapper.map(result));
-			}    
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+	
+	@Override
+	public List<Company> list() {
+		List<Company> list = jdbcTemplate.query(
+				LIST_QRY, new CompanyRowMapper());   
 		return list;
 	}
 
-	public ArrayList<Company> listByPage(int offset, int rows) {
-		ArrayList<Company> list = new ArrayList<Company>();
-		try(Connection connect = connector.getConnection(); 
-				PreparedStatement st = connect.prepareStatement(PAGINATED_LIST_QRY)){
-			st.setInt(1, rows);
-			st.setInt(2, offset);
-			ResultSet result = st.executeQuery();
-			while(result.next()) {
-				list.add(CompanyMapper.map(result));
-			}    
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public List<Company> listByPage(int offset, int rows) {
+			MapSqlParameterSource params = new MapSqlParameterSource();
+			params.addValue("limit", rows);
+			params.addValue("offset", offset);
+			List<Company> list = jdbcTemplate.query(
+					PAGINATED_LIST_QRY, new CompanyRowMapper());  
 		return list;
 	}
 
 	public int getNumberRows() {
-		int count = 0;
-		try(Connection connect = connector.getConnection(); 
-				Statement st = connect.createStatement()){
-			ResultSet result = st.executeQuery(COUNT_QRY);
-			if(result.next())
-				count = result.getInt("var");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		int count = jdbcTemplate.queryForObject(COUNT_QRY, Integer.class);
 		return count;
 	}
 

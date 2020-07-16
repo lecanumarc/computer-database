@@ -5,12 +5,6 @@ import javax.sql.DataSource;
 
 public interface DAO<T> {
 
-	/** 
-	 * This is the method to be used to initialize
-	 * database resources ie. connection.
-	 */
-	public void setDataSource(DataSource ds);
-
 	/**
 	 * M�thode de cr�ation
 	 * @param obj

@@ -1,6 +1,6 @@
 package com.excilys.formation.cdb.services;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class CompanyDaoProvider {
 		return instanceDAO.getNumberRows();
 	}
 
-	public ArrayList<Company> listByPage(int offset, int rows) {
+	public List<Company> listByPage(int offset, int rows) {
 		return instanceDAO.listByPage(offset, rows);
 	}
 
-	public ArrayList<Company> listCompanies() {
+	public List<Company> listCompanies() {
 		return instanceDAO.list();
 	}
 

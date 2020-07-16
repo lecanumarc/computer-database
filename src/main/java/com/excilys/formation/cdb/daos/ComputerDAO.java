@@ -1,12 +1,7 @@
 package com.excilys.formation.cdb.daos;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -77,16 +72,11 @@ public class ComputerDAO implements DAO<Computer>  {
 
 	@Override
 	public boolean update(Computer obj) {
-		//to do : change ate comparaison logic
-		//useonly one computer object and compare new dates
 		
-		//name = :name, introduced = :introduced, discontinued = :discontinued , company_id = :companyId where id = :id";
 		obj.validate();
-		System.out.println("obj : "+obj);
 		Computer computer = this.findById(obj.getId());
 		computer.validate();
 
-		System.out.println("computer : "+computer);
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("name", obj.getName(), Types.VARCHAR);
 
@@ -221,12 +211,6 @@ public class ComputerDAO implements DAO<Computer>  {
 		List<Computer> list = namedJdbcTemplate.query(
 				LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY, params, new ComputerRowMapper());  
 		return list;
-	}
-
-	@Override
-	public void setDataSource(DataSource ds) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -7,21 +7,12 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
 import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class ComputerRowMapper implements RowMapper<Computer> {
 	@Override
 	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
-		CompanyBuilder companyBuilder = new CompanyBuilder();
-		if(rs.getLong("company_id") != 0){
-			companyBuilder.setId(rs.getLong("company_id"));
-		}
-		if(rs.getString("company_name") != null) {
-			companyBuilder.setName(rs.getString("company_name"));
-		}
-
-		Company company = companyBuilder.build();
+		Company company = new CompanyRowMapper().mapRow(rs, rowNum);
 
 		ComputerBuilder computerBuilder = new ComputerBuilder(rs.getString("computer_name"));
 		if(company != null) {

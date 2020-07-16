@@ -2,7 +2,7 @@ package com.excilys.formation.cdb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,7 +21,6 @@ import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.CompanyDaoProvider;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
-import com.excilys.formation.cdb.validator.ComputerValidator;
 
 /**
  * Servlet implementation class EditComputer
@@ -42,7 +41,7 @@ public class EditComputer extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Company> companyList = companyDaoProvider.listCompanies();
+		List<Company> companyList = companyDaoProvider.listCompanies();
 		request.setAttribute("companyList", companyList);
 
 		request.setAttribute("id", request.getParameter("id"));

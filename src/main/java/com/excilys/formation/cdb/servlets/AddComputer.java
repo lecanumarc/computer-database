@@ -2,7 +2,7 @@ package com.excilys.formation.cdb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -42,7 +42,7 @@ public class AddComputer extends HttpServlet {
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Company> companyList = companyDaoProvider.listCompanies();
+		List<Company> companyList = companyDaoProvider.listCompanies();
 		request.setAttribute("companyList", companyList);
 		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
 
