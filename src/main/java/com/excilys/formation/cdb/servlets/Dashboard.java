@@ -24,7 +24,7 @@ import java.time.LocalDate;
 /**
  * Servlet implementation class Dashboard
  */
-@WebServlet("/dashboard")
+@WebServlet("/aaa")
 public class Dashboard extends HttpServlet {
 //	private static final long serialVersionUID = 1L;
 //

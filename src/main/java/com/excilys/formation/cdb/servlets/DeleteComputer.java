@@ -16,7 +16,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 
-@WebServlet("/deleteComputer")
+@WebServlet("/zz")
 public class DeleteComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -23,7 +23,7 @@ import com.excilys.formation.cdb.services.CompanyDaoProvider;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 import com.excilys.formation.cdb.validator.ComputerValidator; 
 
-@WebServlet("/addComputer")
+@WebServlet("/ee")
 public class AddComputer extends HttpServlet {
 
 //	/**

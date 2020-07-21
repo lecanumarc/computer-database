@@ -16,7 +16,7 @@ import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 
 @Controller
-@RequestMapping(value = { "/","/dashboard"})
+@RequestMapping({ "/", "/dashboard"})
 public class DashboardController {
 
 	private int queryNb = 20; //	nb of rows to query
@@ -29,8 +29,12 @@ public class DashboardController {
 	private boolean ascOrder = false;
 	private List<Computer> computerList = null;
 
-	@Autowired
 	ComputerDaoProvider computerDaoProvider;
+
+	@Autowired
+	public DashboardController(ComputerDaoProvider computerDaoProvider) {
+		this.computerDaoProvider = computerDaoProvider;
+	}
 
 	@GetMapping
 	public String listComputers(@RequestParam(required=false, name="queryRows") String queryRows,
@@ -79,23 +83,22 @@ public class DashboardController {
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("currentPage", pageIndex);
 		model.addAttribute("queryOffset", queryOffset);
-		model.addAttribute("queryRows", queryNb);
+
 		model.addAttribute("computerList", computerList);
 		model.addAttribute("rowNumber", rowNumber);
 		if(filter != null) {
 			model.addAttribute("filter", filter);
 		}
+
 		return "dashboard";
 	}
 
 	@PostMapping
 	public String deleteComputers(@RequestParam(name="selection") String selection) {
-		if(selection != null && !selection.isEmpty()) {
-			List<Long> idList = Stream.of(selection.split(","))
-					.map(Long::parseLong)
-					.collect(Collectors.toList());
-			idList.stream().forEach(id->computerDaoProvider.delete(id));
-		}
+		List<Long> idList = Stream.of(selection.split(","))
+				.map(Long::parseLong)
+				.collect(Collectors.toList());
+		idList.stream().forEach(id->computerDaoProvider.delete(id));
 		return "redirect:/dashboard";
 	}
 

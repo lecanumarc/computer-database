@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
@@ -29,12 +28,16 @@ import com.excilys.formation.cdb.services.ComputerDaoProvider;
 @RequestMapping("/addComputer")
 public class AddComputerController {
 
-	@Autowired
+	private static Logger logger = LoggerFactory.getLogger(AddComputerController.class);
+
 	private CompanyDaoProvider companyDaoProvider;
-	@Autowired
 	private ComputerDaoProvider computerDaoProvider;
 
-	private static Logger logger = LoggerFactory.getLogger(AddComputerController.class);
+	@Autowired
+	public AddComputerController(CompanyDaoProvider companyDaoProvider, ComputerDaoProvider computerDaoProvider) {
+		this.computerDaoProvider = computerDaoProvider;
+		this.companyDaoProvider = companyDaoProvider;
+	}
 
 	@GetMapping
 	public String getAddComputer(@ModelAttribute ComputerDto computerDto, Model model) {
@@ -57,21 +60,8 @@ public class AddComputerController {
 		} catch (SQLException e) {
 			logger.error("SQLException ",e);
 		}
-		return getAddComputer(computerDto,model);
-	}
-
-	@ModelAttribute
-	public ComputerDto getComputerDto(@RequestParam(required=false,name="name") String computerName,
-			@RequestParam(required=false, name="introduced") String introduced,
-			@RequestParam(required=false, name="discontinued") String discontinued,
-			@RequestParam(required=false, name="companyId") String companyId,
-			Model model) {
-		CompanyDto companyDto = new CompanyDto(Long.valueOf(companyId));
-		ComputerDto computerDto = new ComputerDto(new Long(0) , computerName);
-		computerDto.setCompany(companyDto);
-		computerDto.setIntroduced(introduced);
-		computerDto.setDiscontinued(discontinued);
-		return computerDto;
+		
+		return "redirect:/dashboard";
 	}
 
 }

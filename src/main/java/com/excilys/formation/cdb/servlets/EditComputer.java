@@ -25,7 +25,7 @@ import com.excilys.formation.cdb.services.ComputerDaoProvider;
 /**
  * Servlet implementation class EditComputer
  */
-@WebServlet("/editComputer")
+@WebServlet("/ww")
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
