@@ -11,8 +11,12 @@ import com.excilys.formation.cdb.pojos.Company;
 @Service
 public class CompanyDaoProvider {
 
-	@Autowired
 	public CompanyDAO instanceDAO;
+
+	@Autowired
+	public CompanyDaoProvider(CompanyDAO companyDao) {
+		this.instanceDAO = companyDao;
+	}
 
 	public boolean add(Company obj) {
 		return instanceDAO.create(obj);

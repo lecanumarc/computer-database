@@ -3,6 +3,8 @@ package com.excilys.formation.cdb.daos;
 import java.util.List;
 import javax.sql.DataSource;
 
+import org.springframework.stereotype.Repository;
+
 public interface DAO<T> {
 
 	/**

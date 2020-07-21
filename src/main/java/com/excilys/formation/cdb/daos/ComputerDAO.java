@@ -1,15 +1,13 @@
 package com.excilys.formation.cdb.daos;
+
 import java.sql.Date;
 import java.sql.Types;
-import java.time.LocalDate;
 import java.util.List;
 
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,7 +17,7 @@ import com.excilys.formation.cdb.mapper.ComputerRowMapper;
 import com.excilys.formation.cdb.pojos.Computer;
 
 @Repository
-public class ComputerDAO implements DAO<Computer>  {
+public class ComputerDAO implements DAO<Computer>{
 
 	//	SQL queries
 	private static final String COUNT_QRY = "SELECT COUNT(computer.id) FROM computer";
@@ -35,18 +33,11 @@ public class ComputerDAO implements DAO<Computer>  {
 	private static final String PAGINATE_QRY =  " LIMIT :limit OFFSET :offset ";
 	private static final String ORDER_QRY =  "ORDER BY";
 
-	private DataSource dataSource;
-	NamedParameterJdbcTemplate namedJdbcTemplate;
-	JdbcTemplate jdbcTemplate;
-
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public ComputerDAO(DataSource dataSource) {
-		this.dataSource = dataSource;
-		this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-
+	public ComputerDAO(NamedParameterJdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@Override
@@ -114,8 +105,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		}
 
 		params.addValue("id", computer.getId(), Types.BIGINT);
-		namedJdbcTemplate.update(UPDATE_QRY, params);
-		logger.info("Computer updated.");
+		jdbcTemplate.update(UPDATE_QRY, params);
 		return true;
 	}
 
@@ -123,7 +113,7 @@ public class ComputerDAO implements DAO<Computer>  {
 	public Computer findById(Long id) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("id", id);
-		Computer computer = namedJdbcTemplate.queryForObject(
+		Computer computer = jdbcTemplate.queryForObject(
 				FIND_BY_ID_QRY, params, new ComputerRowMapper());   
 		return computer;
 	}
@@ -132,7 +122,7 @@ public class ComputerDAO implements DAO<Computer>  {
 	public Computer findByName(String name) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("name", name);
-		Computer computer = namedJdbcTemplate.queryForObject(
+		Computer computer = jdbcTemplate.queryForObject(
 				FIND_BY_NAME_QRY, params, new ComputerRowMapper());   
 		return computer;
 	}
@@ -145,8 +135,9 @@ public class ComputerDAO implements DAO<Computer>  {
 	}
 
 	@Override
-	public int getNumberRows() {
-		int count = jdbcTemplate.queryForObject(COUNT_QRY, Integer.class);
+	public int getNumberRows(){
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		int count = jdbcTemplate.queryForObject(COUNT_QRY, parameters,  Integer.class);
 		return count;
 	}
 
@@ -157,7 +148,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		params.addValue("companyName", filter);
 		params.addValue("introduced", filter);
 		params.addValue("discontinued", filter);
-		int count = namedJdbcTemplate.queryForObject(
+		int count = jdbcTemplate.queryForObject(
 				COUNT_FILTERED_QRY, params, Integer.class);  
 		return count;
 	}
@@ -166,7 +157,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("limit", rows);
 		params.addValue("offset", offset);
-		List<Computer> list = namedJdbcTemplate.query(
+		List<Computer> list = jdbcTemplate.query(
 				LIST_QRY + PAGINATE_QRY, params, new ComputerRowMapper());  
 		return list;
 	}
@@ -180,7 +171,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		params.addValue("companyName", filter);
 		params.addValue("introduced", filter);
 		params.addValue("discontinued", filter);
-		List<Computer> list = namedJdbcTemplate.query(
+		List<Computer> list = jdbcTemplate.query(
 				LIST_QRY +FILTER_QRY +PAGINATE_QRY, params, new ComputerRowMapper());  
 		return list;
 
@@ -191,7 +182,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("limit", rows);
 		params.addValue("offset", offset);
-		List<Computer> list = namedJdbcTemplate.query(
+		List<Computer> list = jdbcTemplate.query(
 				LIST_QRY + ORDER_QRY + " " +column +" " +order +" " + PAGINATE_QRY, params, new ComputerRowMapper());  
 		return list;
 	}
@@ -208,7 +199,7 @@ public class ComputerDAO implements DAO<Computer>  {
 		params.addValue("discontinued", filter);
 		params.addValue("limit", rows);
 		params.addValue("offset", offset);
-		List<Computer> list = namedJdbcTemplate.query(
+		List<Computer> list = jdbcTemplate.query(
 				LIST_QRY + FILTER_QRY + ORDER_QRY + " " + column +" " +order +" " + PAGINATE_QRY, params, new ComputerRowMapper());  
 		return list;
 	}

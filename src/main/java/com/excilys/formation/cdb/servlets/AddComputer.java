@@ -26,44 +26,44 @@ import com.excilys.formation.cdb.validator.ComputerValidator;
 @WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	@Autowired
-	CompanyDaoProvider companyDaoProvider; 
-	@Autowired
-	ComputerDaoProvider computerDaoProvider; 
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-	}
-
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<Company> companyList = companyDaoProvider.listCompanies();
-		request.setAttribute("companyList", companyList);
-		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
-
-	}
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		CompanyDto companyDto = new CompanyDto(Long.parseLong(request.getParameter("companyId")));
-		ComputerDto computerDto = new ComputerDto(request.getParameter("computerName"),
-				request.getParameter("introduced"),
-				request.getParameter("discontinued"),
-				companyDto);
-
-		try {
-			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			ComputerValidator.validate(computer);
-			computerDaoProvider.add(computer);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		response.sendRedirect(request.getContextPath() + "/dashboard");
-	}
+//	/**
+//	 * 
+//	 */
+//	private static final long serialVersionUID = 1L;
+//	@Autowired
+//	CompanyDaoProvider companyDaoProvider; 
+//	@Autowired
+//	ComputerDaoProvider computerDaoProvider; 
+//	
+//	@Override
+//	public void init(ServletConfig config) throws ServletException {
+//		super.init(config);
+//		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+//	}
+//
+//	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		List<Company> companyList = companyDaoProvider.listCompanies();
+//		request.setAttribute("companyList", companyList);
+//		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
+//
+//	}
+//
+//	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//
+//		CompanyDto companyDto = new CompanyDto(Long.parseLong(request.getParameter("companyId")));
+//		ComputerDto computerDto = new ComputerDto(request.getParameter("computerName"),
+//				request.getParameter("introduced"),
+//				request.getParameter("discontinued"),
+//				companyDto);
+//
+//		try {
+//			Computer computer = ComputerMapper.DtoToComputer(computerDto);
+//			ComputerValidator.validate(computer);
+//			computerDaoProvider.add(computer);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		response.sendRedirect(request.getContextPath() + "/dashboard");
+//	}
 
 }

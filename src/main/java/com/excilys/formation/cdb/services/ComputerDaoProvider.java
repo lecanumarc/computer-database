@@ -5,15 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.excilys.formation.cdb.daos.CompanyDAO;
 import com.excilys.formation.cdb.daos.ComputerDAO;
 import com.excilys.formation.cdb.pojos.Computer;
 
 @Service
 public class ComputerDaoProvider {
 
-	@Autowired
 	public ComputerDAO instanceDAO;
 
+	@Autowired
+	public ComputerDaoProvider(ComputerDAO computerDao) {
+		this.instanceDAO = computerDao;
+	}
 	public boolean add(Computer obj) {
 		return instanceDAO.create(obj);
 	}

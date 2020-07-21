@@ -3,15 +3,17 @@ package com.excilys.formation.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.pojos.Company;
-import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
-import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class CompanyMapper {
+
+	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
 	public static Company map(ResultSet result) {
 		Company company = null;
@@ -23,29 +25,29 @@ public class CompanyMapper {
 			if(result.getLong("id") != 0) {
 				companyBuilder.setId(result.getLong("id"));
 			}
-				
+
 			company = companyBuilder.build();
-			
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Error during mapping",e);
 		}
 		return company;
 	}
 
-	public static CompanyDto CompanyToDto(Company company) throws SQLException {
+	public static CompanyDto CompanyToDto(Company company) {
 		CompanyDto companyDto = new CompanyDto();
-		
+
 		if(company != null && company.getId() != 0) {
 			companyDto.setId(company.getId());
 			if(company.getName() != null) {
 				companyDto.setName(company.getName());
 			}
 		}
-		
+
 		return companyDto;
 	}
 
-	public static Company DtoToCompany(CompanyDto companyDto) throws SQLException {
+	public static Company DtoToCompany(CompanyDto companyDto) {
 		Company company = new Company();
 		if(companyDto != null) {
 			CompanyBuilder companyBuilder = new Company.CompanyBuilder();
@@ -57,20 +59,20 @@ public class CompanyMapper {
 			}
 			company = companyBuilder.build();
 		}
-		
+
 		return company;
 	}
 
 	class CompanyRowMapper implements RowMapper<Company> {
-	    @Override
-	    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-	    	Company company = new CompanyBuilder()
-	    			.setName(rs.getString("name"))
-	    			.setId(rs.getLong("id"))
-	    			.build();
-	        return company;
-	    }
+		@Override
+		public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+			Company company = new CompanyBuilder()
+					.setName(rs.getString("name"))
+					.setId(rs.getLong("id"))
+					.build();
+			return company;
+		}
 	}
-	
-	
+
+
 }
