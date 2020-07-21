@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
@@ -49,18 +50,24 @@ public class AddComputerController {
 				.collect(Collectors.toList());		
 		model.addAttribute("companyList", companyList);
 		return "addComputer";
+
 	}
 
 	@PostMapping
-	public String postAddComputer(@ModelAttribute ComputerDto computerDto,
-			Model model) {
+	public String postAddComputer(@RequestParam(required=false, name="companyId") Long companyId,
+			@RequestParam(required=false, name="computerName") String computerName,
+			@RequestParam(required=false, name="introduced") String introduced,
+			@RequestParam(required=false, name="discontinued") String discontinued) {
+
+		CompanyDto companyDto = new CompanyDto(companyId);
+		ComputerDto computerDto = new ComputerDto(computerName, introduced, discontinued, companyDto);
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
+			System.out.println(computer);
 			computerDaoProvider.add(computer);
 		} catch (SQLException e) {
-			logger.error("SQLException ",e);
+			logger.error(e.getMessage());
 		}
-		
 		return "redirect:/dashboard";
 	}
 

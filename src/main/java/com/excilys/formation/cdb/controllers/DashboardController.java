@@ -71,14 +71,14 @@ public class DashboardController {
 			filter = null;
 			if(columnOrder != null && !columnOrder.isEmpty()) {
 				model.addAttribute("columnOrder", columnOrder);
-				model.addAttribute("columnOrder", columnOrder);
+				setOrder(columnOrder, model);
 				computerList = computerDaoProvider.listOrdered(queryOffset - 1, queryNb, column, ascOrder);
 			} else {
 				computerList = computerDaoProvider.listByPage(queryOffset - 1, queryNb);
 				rowNumber = computerDaoProvider.getNumberRows();
 			}
 		}
-
+		
 		maxPage = Math.ceil((rowNumber/(double)queryNb));
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("currentPage", pageIndex);

@@ -52,15 +52,17 @@ public class EditComputerController {
 
 	@PostMapping
 	public String postAddComputer(@RequestParam(required=false, name="companyId") Long companyId,
+			@RequestParam(required=false, name="id") Long id,
 			@RequestParam(required=false, name="computerName") String computerName,
 			@RequestParam(required=false, name="introduced") String introduced,
 			@RequestParam(required=false, name="discontinued") String discontinued) {
 
 		CompanyDto companyDto = new CompanyDto(companyId);
 		ComputerDto computerDto = new ComputerDto(computerName, introduced, discontinued, companyDto);
-		computerDto.setId(companyId);
+		computerDto.setId(id);
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
+			System.out.println(computer);
 			computerDaoProvider.edit(computer);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());
