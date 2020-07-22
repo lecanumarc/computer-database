@@ -1,12 +1,21 @@
 package com.excilys.formation.cdb.pojos;
 
-import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
-
+@Entity
+@Table(name="company")
 public class Company {
-
+	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
+	@Column(name="name")
 	String name;
 
 	public Company() {
@@ -22,11 +31,11 @@ public class Company {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		if(name != null) {
 			this.name = name;

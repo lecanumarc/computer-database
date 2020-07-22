@@ -2,16 +2,39 @@ package com.excilys.formation.cdb.pojos;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.excilys.formation.cdb.validator.ComputerValidator;
 
+@Entity
+@Table(name = "computer")
 public class Computer {
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name; // mandatory
+	@Column(name = "name")
+	private String name; 
+	@Column(name = "introduced")
 	private LocalDate introduced; 
-	private LocalDate discontinued; 
+	@Column(name = "discontinued")
+	private LocalDate discontinued;
+	@ManyToOne
+	@JoinColumn(name = "company_id")
 	private Company company;
 
 
+	private Computer() {
+		
+	}
+	
 	private Computer(ComputerBuilder computerBuilder) {
 		super();
 		this.id = computerBuilder.id;
@@ -66,7 +89,7 @@ public class Computer {
 		private LocalDate introduced; 
 		private LocalDate discontinued; 
 		private Company company;
-		
+
 		public  ComputerBuilder(String name) {
 			this.name = name;
 		}

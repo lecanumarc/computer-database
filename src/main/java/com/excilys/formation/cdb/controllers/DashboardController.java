@@ -16,7 +16,7 @@ import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 
 @Controller
-@RequestMapping({ "/", "/dashboard"})
+@RequestMapping({"/", "/dashboard"})
 public class DashboardController {
 
 	private int queryNb = 20; //	nb of rows to query

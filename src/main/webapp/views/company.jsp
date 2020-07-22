@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Test hello world file</title>
+<title>Test company</title>
 </head>
 <body>
-${message}
+Company : 
+${company}
+
+Computer : 
+${computer}
 </body>
 </html>
