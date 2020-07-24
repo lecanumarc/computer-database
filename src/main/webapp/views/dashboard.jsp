@@ -66,7 +66,7 @@
 							</span>
 						</th>
 						<th>
-							<a href="dashboard?columnOrder=computer.name">
+							<a href="dashboard?columnOrder=name">
 								<spring:message code="dashboard.computerName"/>
 							</a>
 	                         	

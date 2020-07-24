@@ -34,7 +34,7 @@ public class DeleteComputer extends HttpServlet {
 			List<String> idList = Arrays.asList(request.getParameter("selection").split(","));
 			for(String id : idList) {
 				Long idLong = Long.parseLong(id);
-				computerDaoProvider.delete(idLong);
+//				computerDaoProvider.delete(idLong);
 			}
 		}
 		response.sendRedirect(request.getContextPath() + "/dashboard");

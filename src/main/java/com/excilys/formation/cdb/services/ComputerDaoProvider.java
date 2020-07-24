@@ -1,62 +1,71 @@
 package com.excilys.formation.cdb.services;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.excilys.formation.cdb.daos.CompanyDAO;
-import com.excilys.formation.cdb.daos.ComputerDAO;
+import com.excilys.formation.cdb.daos.ComputerRepository;
 import com.excilys.formation.cdb.pojos.Computer;
 
 @Service
 public class ComputerDaoProvider {
 
-	public ComputerDAO instanceDAO;
+	public ComputerRepository instanceDAO;
 
 	@Autowired
-	public ComputerDaoProvider(ComputerDAO computerDao) {
+	public ComputerDaoProvider(ComputerRepository computerDao) {
 		this.instanceDAO = computerDao;
 	}
-	public boolean add(Computer obj) {
-		return instanceDAO.create(obj);
+	public Computer add(Computer obj) {
+		return instanceDAO.save(obj);
 	}
 
-	public boolean delete(Long id) {
-		return instanceDAO.delete(id);
+	public void delete(Computer obj) {
+		instanceDAO.delete(obj);
 	}
 
-	public boolean edit(Computer obj) {
-		return instanceDAO.update(obj);
+	public Computer edit(Computer obj) {
+		return instanceDAO.save(obj);
 	}
 
-	public Computer findById(Long id) {
+	public Optional<Computer> findById(Long id) {
 		return instanceDAO.findById(id);
 	}
 
 	public int getNumberRows() {
-		return instanceDAO.getNumberRows();
+		return (int) instanceDAO.count();
 	}
 
 	public int getNumberRowsFiltered(String filter) {
-		return instanceDAO.getNumberRowsFiltered(filter);
+		//return instanceDAO.getNumberRowsFiltered(filter);
+		return 0;
 	}
 
-	public List<Computer> listByPage(int offset, int rows) {
-		return instanceDAO.listByPage(offset, rows);
+	public Page<Computer> listByPage(int offset, int rows) {
+		return instanceDAO.findAll(PageRequest.of(offset, rows));
 	}
 
-	public List<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
-		return instanceDAO.listOrderedAndFiltered(offset, rows, filter, column, ascOrder);
+	public Page<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
+		return instanceDAO.findByNameContaining(filter, PageRequest.of(offset, rows , sortBy(column, ascOrder)));
 	}
 
-
-	public List<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
-		return instanceDAO.listOrdered(offset, rows, column, ascOrder);
+	private Sort sortBy(String column, boolean ascOrder) {
+		if(ascOrder) {
+			return Sort.by(column).ascending();
+		}
+		return Sort.by(column).descending();
 	}
 
-	public List<Computer> listFiltered(int offset, int rows, String filter) {
-		return instanceDAO.listFiltered(offset, rows, filter);
+	public Page<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
+		return instanceDAO.findAll(PageRequest.of(offset, rows , sortBy(column, ascOrder)));
+	}
+
+	public Page<Computer> listFiltered(int offset, int rows, String filter) {
+		return instanceDAO.findByNameContaining(filter, PageRequest.of(offset, rows));
 	}
 
 }

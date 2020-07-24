@@ -2,6 +2,7 @@ package com.excilys.formation.cdb.controllers;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ import com.excilys.formation.cdb.services.ComputerDaoProvider;
 public class EditComputerController {
 
 	private static Logger logger = LoggerFactory.getLogger(EditComputerController.class);
-	
+
 	CompanyDaoProvider companyDaoProvider; 
 	ComputerDaoProvider computerDaoProvider; 
 
@@ -41,13 +42,20 @@ public class EditComputerController {
 	@GetMapping
 	public String editComputerGet(@RequestParam(value="id") Long id,
 			ModelMap dataMap) {
-		Computer computerToUpdate = computerDaoProvider.findById(id);
+		Optional<Computer> computerToUpdate = computerDaoProvider.findById(id);
+		ComputerDto computerDto = null;
+		if(computerToUpdate.isPresent()) {
+			try {
+				computerDto = ComputerMapper.ComputerToDto(computerToUpdate.get());
+			} catch (SQLException e) {
+				logger.error(e.getMessage());
+			}
+		}
 		List<CompanyDto> companyDtoList = getCompanyDtoList();
 		dataMap.addAttribute("companyList", companyDtoList);
 		dataMap.addAttribute("id", id);
-		dataMap.addAttribute("computerToUpdate", computerToUpdate);
+		dataMap.addAttribute("computerToUpdate", computerDto);
 		return "editComputer";
-
 	}
 
 	@PostMapping
@@ -62,7 +70,6 @@ public class EditComputerController {
 		computerDto.setId(id);
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			System.out.println(computer);
 			computerDaoProvider.edit(computer);
 		} catch (SQLException e) {
 			logger.error(e.getMessage());

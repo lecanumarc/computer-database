@@ -1,10 +1,11 @@
 package com.excilys.formation.cdb.controllers;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.formation.cdb.dto.ComputerDto;
+import com.excilys.formation.cdb.mapper.ComputerMapper;
 import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.services.ComputerDaoProvider;
 
@@ -27,7 +30,8 @@ public class DashboardController {
 	private String filter = null;
 	private String column = null;
 	private boolean ascOrder = false;
-	private List<Computer> computerList = null;
+	private Page<Computer> computerList = null;
+	private List<ComputerDto> computerDtoList = null;
 
 	ComputerDaoProvider computerDaoProvider;
 
@@ -79,12 +83,13 @@ public class DashboardController {
 			}
 		}
 		
+		computerDtoList = getComputerDtoList(computerList);
 		maxPage = Math.ceil((rowNumber/(double)queryNb));
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("currentPage", pageIndex);
 		model.addAttribute("queryOffset", queryOffset);
 
-		model.addAttribute("computerList", computerList);
+		model.addAttribute("computerList", computerDtoList);
 		model.addAttribute("rowNumber", rowNumber);
 		if(filter != null) {
 			model.addAttribute("filter", filter);
@@ -95,10 +100,10 @@ public class DashboardController {
 
 	@PostMapping
 	public String deleteComputers(@RequestParam(name="selection") String selection) {
-		List<Long> idList = Stream.of(selection.split(","))
-				.map(Long::parseLong)
-				.collect(Collectors.toList());
-		idList.stream().forEach(id->computerDaoProvider.delete(id));
+//		List<Long> idList = Stream.of(selection.split(","))
+//				.map(Long::parseLong)
+//				.collect(Collectors.toList());
+//		idList.stream().forEach(id->computerDaoProvider.delete(id));
 		return "redirect:/dashboard";
 	}
 
@@ -110,6 +115,20 @@ public class DashboardController {
 			ascOrder = true;
 		}
 		model.addAttribute("columnOrder", column);
+	}
+
+	private List<ComputerDto> getComputerDtoList(Page<Computer> computerList){
+		List<ComputerDto> dtoList = computerList.stream()
+				.map((Computer computer)-> {
+					try {
+						return ComputerMapper.ComputerToDto(computer);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					return null;
+				})
+				.collect(Collectors.toList());
+		return dtoList;
 	}
 
 

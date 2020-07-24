@@ -63,10 +63,10 @@ public class AddComputerController {
 		ComputerDto computerDto = new ComputerDto(computerName, introduced, discontinued, companyDto);
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			System.out.println(computer);
-			computerDaoProvider.add(computer);
+			Computer computer2 = computerDaoProvider.add(computer);
+			System.out.println("Computer to add --------------------" +computer2);
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
+			logger.error("Error while adding computer : " +e.getMessage());
 		}
 		return "redirect:/dashboard";
 	}

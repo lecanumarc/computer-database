@@ -46,8 +46,8 @@ public class EditComputer extends HttpServlet {
 
 		request.setAttribute("id", request.getParameter("id"));
 		Long id =  Long.parseLong(request.getParameter("id"));
-		Computer computerToUpdate = computerDaoProvider.findById(id);
-		request.setAttribute("computerToUpdate", computerToUpdate);
+//		Computer computerToUpdate = computerDaoProvider.findById(id);
+//		request.setAttribute("computerToUpdate", computerToUpdate);
 		request.getRequestDispatcher("views/editComputer.jsp").forward(request, response);
 	}
 
