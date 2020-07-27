@@ -2,6 +2,9 @@ package com.excilys.formation.cdb.services;
 
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,24 +18,36 @@ import com.excilys.formation.cdb.pojos.Computer;
 public class ComputerDaoProvider {
 
 	public ComputerRepository instanceDAO;
+	private EntityManagerFactory emf;
+	private EntityManager em;
 
 	@Autowired
-	public ComputerDaoProvider(ComputerRepository computerDao) {
+	public ComputerDaoProvider(ComputerRepository computerDao, EntityManagerFactory emf) {
 		this.instanceDAO = computerDao;
-	}
-	public Computer add(Computer obj) {
-		return instanceDAO.save(obj);
-	}
-
-	public void delete(Computer obj) {
-		instanceDAO.delete(obj);
+		this.emf = emf;
+		this.em = emf.createEntityManager();
 	}
 
-	public Computer edit(Computer obj) {
-		return instanceDAO.save(obj);
+	public void add(Computer obj) {
+		em.getTransaction().begin();
+		em.persist(obj);
+		em.getTransaction().commit();
 	}
 
-	public Optional<Computer> findById(Long id) {
+	public void delete(long id) {
+		Computer computer =  em.find(Computer.class, id);
+		em.getTransaction().begin();
+		em.remove(computer);
+		em.getTransaction().commit();
+	}
+
+	public void edit(Computer obj) {
+		em.getTransaction().begin();
+		em.merge(obj);
+		em.getTransaction().commit();
+	}
+
+	public Optional<Computer> findById(long id) {
 		return instanceDAO.findById(id);
 	}
 

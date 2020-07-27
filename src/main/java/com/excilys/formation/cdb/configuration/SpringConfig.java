@@ -22,36 +22,36 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages="com.excilys.formation.cdb")
 @EnableJpaRepositories(basePackages = "com.excilys.formation.cdb.daos")
 public class SpringConfig {
-	
+
 	@Bean
 	public DataSource hikariDataSource() {
 		return new HikariDataSource(new HikariConfig("/datasource.properties"));
 	}
-	
+
 	@Bean
-	  public EntityManagerFactory entityManagerFactory() {
+	public EntityManagerFactory entityManagerFactory() {
 
-	    HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-	    vendorAdapter.setGenerateDdl(true);
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setGenerateDdl(true);
 
-	    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-	    factory.setJpaVendorAdapter(vendorAdapter);
-	    factory.setPackagesToScan("com.excilys.formation.cdb.pojos");
-	    factory.setDataSource(hikariDataSource());
-	    factory.afterPropertiesSet();
+		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+		factory.setJpaVendorAdapter(vendorAdapter);
+		factory.setPackagesToScan("com.excilys.formation.cdb.pojos");
+		factory.setDataSource(hikariDataSource());
+		factory.afterPropertiesSet();
 
-	    return factory.getObject();
-	  }
+		return factory.getObject();
+	}
 
 	@Bean
 	public NamedParameterJdbcTemplate jdbcTemplate(DataSource hikariDataSource){
 		return new NamedParameterJdbcTemplate(hikariDataSource);
 	}
-	
+
 	@Bean
 	public PlatformTransactionManager transactionManager(DataSource hikariDataSource) {
-	    DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
-	    dataSourceTransactionManager.setDataSource(hikariDataSource);
-	    return dataSourceTransactionManager;
+		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+		dataSourceTransactionManager.setDataSource(hikariDataSource);
+		return dataSourceTransactionManager;
 	}
 }

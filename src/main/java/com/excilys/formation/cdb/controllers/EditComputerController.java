@@ -3,11 +3,11 @@ package com.excilys.formation.cdb.controllers;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +51,9 @@ public class EditComputerController {
 				logger.error(e.getMessage());
 			}
 		}
-		List<CompanyDto> companyDtoList = getCompanyDtoList();
+		
+		List<Company> companyList = companyDaoProvider.listCompanies();
+		List<CompanyDto> companyDtoList = CompanyMapper.getCompanyDtoList(companyList);
 		dataMap.addAttribute("companyList", companyDtoList);
 		dataMap.addAttribute("id", id);
 		dataMap.addAttribute("computerToUpdate", computerDto);
@@ -76,14 +78,5 @@ public class EditComputerController {
 		}
 		return "redirect:/dashboard";
 	}
-
-	private List<CompanyDto> getCompanyDtoList(){
-		List<Company> companyList = companyDaoProvider.listCompanies();
-		List<CompanyDto> companyDtoList = companyList.stream()
-				.map((Company company)-> CompanyMapper.CompanyToDto(company))
-				.collect(Collectors.toList());
-		return companyDtoList;
-	}
-
 
 }

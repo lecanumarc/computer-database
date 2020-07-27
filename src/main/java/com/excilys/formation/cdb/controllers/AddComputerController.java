@@ -44,7 +44,7 @@ public class AddComputerController {
 	public String getAddComputer(@ModelAttribute ComputerDto computerDto, Model model) {
 
 		List<Company> companies = companyDaoProvider.listCompanies();
-		List<CompanyDto> companyList = new ArrayList<CompanyDto>();
+		List<CompanyDto> companyList =  new ArrayList<CompanyDto>();
 		companyList = companies.stream()
 				.map(company->CompanyMapper.CompanyToDto(company))
 				.collect(Collectors.toList());		
@@ -63,8 +63,7 @@ public class AddComputerController {
 		ComputerDto computerDto = new ComputerDto(computerName, introduced, discontinued, companyDto);
 		try {
 			Computer computer = ComputerMapper.DtoToComputer(computerDto);
-			Computer computer2 = computerDaoProvider.add(computer);
-			System.out.println("Computer to add --------------------" +computer2);
+			computerDaoProvider.add(computer);
 		} catch (SQLException e) {
 			logger.error("Error while adding computer : " +e.getMessage());
 		}

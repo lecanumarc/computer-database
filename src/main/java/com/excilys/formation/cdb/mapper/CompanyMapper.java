@@ -68,7 +68,7 @@ public class CompanyMapper {
 		return company;
 	}
 
-	public static  List<CompanyDto> getCompanyDtoList(Page<Company> companyList){
+	public static List<CompanyDto> getCompanyDtoList(List<Company> companyList){
 		List<CompanyDto> dtoList = companyList.stream()
 				.map((Company company)-> {
 					return CompanyMapper.CompanyToDto(company);

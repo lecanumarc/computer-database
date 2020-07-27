@@ -1,6 +1,8 @@
 package com.excilys.formation.cdb.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -94,10 +96,10 @@ public class DashboardController {
 
 	@PostMapping
 	public String deleteComputers(@RequestParam(name="selection") String selection) {
-		//		List<Long> idList = Stream.of(selection.split(","))
-		//				.map(Long::parseLong)
-		//				.collect(Collectors.toList());
-		//		idList.stream().forEach(id->computerDaoProvider.delete(id));
+		List<Long> idList = Stream.of(selection.split(","))
+				.map(Long::parseLong)
+				.collect(Collectors.toList());
+		idList.stream().forEach(id->computerDaoProvider.delete(id));
 		return "redirect:/dashboard";
 	}
 
