@@ -48,19 +48,11 @@ public class TestController {
 	@GetMapping
 	public String TestGet(@RequestParam(value="id") Long id,
 			ModelMap dataMap) {
-		Page<Computer> computerList = computerDaoProvider.listByPage(0, 10);
-		System.out.println(computerList.getContent());
-		List<ComputerDto> dtoList = computerList.stream()
-		.map((Computer computer) ->  {
-			try {
-				return ComputerMapper.ComputerToDto(computer);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return null;
-		})
-		.collect(Collectors.toList());
-		
+		Page<Computer> computerList = computerDaoProvider.listByPage(1, 20);
+		List<ComputerDto> dtoList = ComputerMapper.getComputerDtoList(computerList);
+		for(ComputerDto dto : dtoList) {
+			System.out.println(dto);
+		}
 		dataMap.addAttribute("computerList", dtoList);
 		return "company";
 

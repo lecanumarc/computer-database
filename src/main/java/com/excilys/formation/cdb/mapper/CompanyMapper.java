@@ -2,13 +2,18 @@ package com.excilys.formation.cdb.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
+import com.excilys.formation.cdb.dto.ComputerDto;
 import com.excilys.formation.cdb.pojos.Company;
+import com.excilys.formation.cdb.pojos.Computer;
 import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
 
 public class CompanyMapper {
@@ -63,16 +68,13 @@ public class CompanyMapper {
 		return company;
 	}
 
-	class CompanyRowMapper implements RowMapper<Company> {
-		@Override
-		public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Company company = new CompanyBuilder()
-					.setName(rs.getString("name"))
-					.setId(rs.getLong("id"))
-					.build();
-			return company;
-		}
+	public static  List<CompanyDto> getCompanyDtoList(Page<Company> companyList){
+		List<CompanyDto> dtoList = companyList.stream()
+				.map((Company company)-> {
+					return CompanyMapper.CompanyToDto(company);
+				})
+				.collect(Collectors.toList());
+		return dtoList;
 	}
-
 
 }

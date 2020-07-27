@@ -1,8 +1,6 @@
 package com.excilys.formation.cdb.controllers;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,9 +22,8 @@ public class DashboardController {
 
 	private int queryNb = 20; //	nb of rows to query
 	private double maxPage = 1;	
-	private int queryOffset = 1;	
-	private int pageIndex = 1;	
-	private int rowNumber = 0;
+	private int pageIndex = 0;	
+	private long rowNumber = 0;
 	private String filter = null;
 	private String column = null;
 	private boolean ascOrder = false;
@@ -45,49 +42,46 @@ public class DashboardController {
 			@RequestParam(required=false, name="currentPage") String currentPage,
 			@RequestParam(required=false, name="search") String search,
 			@RequestParam(required=false, name="columnOrder") String columnOrder,
-			@RequestParam(required=false, name="search") String searchRequest,
 			Model model) {
 
 		if(queryRows != null) {
 			queryNb = Integer.parseInt(queryRows);
 		}
 		if(currentPage != null) {
-			pageIndex = Integer.parseInt(currentPage);
-			queryOffset = pageIndex * queryNb;
+			pageIndex = Integer.parseInt(currentPage) - 1;
 		}
 		else {
 			pageIndex = 0;
-			queryOffset = 1;
 		}
 
-		if(search != null && !search.trim().isEmpty()) {
-			filter = search.trim();
-			rowNumber = computerDaoProvider.getNumberRowsFiltered(filter);
 
-			if(columnOrder != null && !columnOrder.isEmpty()) {
-				model.addAttribute("columnOrder", columnOrder);
-				setOrder(columnOrder, model);
-				computerList = computerDaoProvider.listOrderedAndFiltered(queryOffset - 1, queryNb, filter, column, ascOrder);
+		if(search != null) {
+			filter = search.trim();
+		}
+		if(columnOrder != null && !columnOrder.isEmpty()) {
+			setOrder(columnOrder, model);
+		}
+
+		if(filter != null) {
+			if(column != null) {
+				computerList = computerDaoProvider.listOrderedAndFiltered(pageIndex, queryNb, filter, column, ascOrder);
 			} else {
-				computerList = computerDaoProvider.listFiltered(queryOffset - 1, queryNb, filter);
+				computerList = computerDaoProvider.listFiltered(pageIndex,  queryNb, filter);
 			}
 		} else {
-			filter = null;
-			if(columnOrder != null && !columnOrder.isEmpty()) {
-				model.addAttribute("columnOrder", columnOrder);
-				setOrder(columnOrder, model);
-				computerList = computerDaoProvider.listOrdered(queryOffset - 1, queryNb, column, ascOrder);
+			if(column != null) {
+				computerList = computerDaoProvider.listOrdered(pageIndex, queryNb, column, ascOrder);
 			} else {
-				computerList = computerDaoProvider.listByPage(queryOffset - 1, queryNb);
-				rowNumber = computerDaoProvider.getNumberRows();
+				computerList = computerDaoProvider.listByPage(pageIndex, queryNb);
 			}
 		}
-		
-		computerDtoList = getComputerDtoList(computerList);
-		maxPage = Math.ceil((rowNumber/(double)queryNb));
+
+		computerDtoList = ComputerMapper.getComputerDtoList(computerList);
+		maxPage = computerList.getTotalPages();
+		rowNumber = computerList.getTotalElements();
+
 		model.addAttribute("maxPage", maxPage);
-		model.addAttribute("currentPage", pageIndex);
-		model.addAttribute("queryOffset", queryOffset);
+		model.addAttribute("currentPage", pageIndex+1);
 
 		model.addAttribute("computerList", computerDtoList);
 		model.addAttribute("rowNumber", rowNumber);
@@ -100,10 +94,10 @@ public class DashboardController {
 
 	@PostMapping
 	public String deleteComputers(@RequestParam(name="selection") String selection) {
-//		List<Long> idList = Stream.of(selection.split(","))
-//				.map(Long::parseLong)
-//				.collect(Collectors.toList());
-//		idList.stream().forEach(id->computerDaoProvider.delete(id));
+		//		List<Long> idList = Stream.of(selection.split(","))
+		//				.map(Long::parseLong)
+		//				.collect(Collectors.toList());
+		//		idList.stream().forEach(id->computerDaoProvider.delete(id));
 		return "redirect:/dashboard";
 	}
 
@@ -116,20 +110,5 @@ public class DashboardController {
 		}
 		model.addAttribute("columnOrder", column);
 	}
-
-	private List<ComputerDto> getComputerDtoList(Page<Computer> computerList){
-		List<ComputerDto> dtoList = computerList.stream()
-				.map((Computer computer)-> {
-					try {
-						return ComputerMapper.ComputerToDto(computer);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					return null;
-				})
-				.collect(Collectors.toList());
-		return dtoList;
-	}
-
 
 }

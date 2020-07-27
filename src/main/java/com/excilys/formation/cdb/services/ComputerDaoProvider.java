@@ -40,17 +40,12 @@ public class ComputerDaoProvider {
 		return (int) instanceDAO.count();
 	}
 
-	public int getNumberRowsFiltered(String filter) {
-		//return instanceDAO.getNumberRowsFiltered(filter);
-		return 0;
+	public Page<Computer> listByPage(int index, int rows) {
+		return instanceDAO.findAll(PageRequest.of(index, rows));
 	}
 
-	public Page<Computer> listByPage(int offset, int rows) {
-		return instanceDAO.findAll(PageRequest.of(offset, rows));
-	}
-
-	public Page<Computer> listOrderedAndFiltered(int offset, int rows, String filter, String column, boolean ascOrder) {
-		return instanceDAO.findByNameContaining(filter, PageRequest.of(offset, rows , sortBy(column, ascOrder)));
+	public Page<Computer> listOrderedAndFiltered(int index, int rows, String filter, String column, boolean ascOrder) {
+		return instanceDAO.findByNameContaining(filter, PageRequest.of(index, rows , sortBy(column, ascOrder)));
 	}
 
 	private Sort sortBy(String column, boolean ascOrder) {
@@ -60,12 +55,12 @@ public class ComputerDaoProvider {
 		return Sort.by(column).descending();
 	}
 
-	public Page<Computer> listOrdered(int offset, int rows, String column, boolean ascOrder) {
-		return instanceDAO.findAll(PageRequest.of(offset, rows , sortBy(column, ascOrder)));
+	public Page<Computer> listOrdered(int index, int rows, String column, boolean ascOrder) {
+		return instanceDAO.findAll(PageRequest.of(index, rows , sortBy(column, ascOrder)));
 	}
 
-	public Page<Computer> listFiltered(int offset, int rows, String filter) {
-		return instanceDAO.findByNameContaining(filter, PageRequest.of(offset, rows));
+	public Page<Computer> listFiltered(int index, int rows, String filter) {
+		return instanceDAO.findByNameContaining(filter, PageRequest.of(index, rows));
 	}
 
 }

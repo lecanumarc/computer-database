@@ -3,14 +3,16 @@ package com.excilys.formation.cdb.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.data.domain.Page;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
 import com.excilys.formation.cdb.pojos.Company;
 import com.excilys.formation.cdb.pojos.Computer;
-import com.excilys.formation.cdb.pojos.Company.CompanyBuilder;
 import com.excilys.formation.cdb.pojos.Computer.ComputerBuilder;
 
 public class ComputerMapper {
@@ -48,11 +50,11 @@ public class ComputerMapper {
 			computerDto = new ComputerDto(computer.getId(), computer.getName());
 
 			if(computer.getIntroduced() != null) {
-				computerDto.setIntroduced(computer.getIntroduced().toString());
+				computerDto.setIntroduced(computer.getIntroduced().format(DateTimeFormatter.ISO_DATE));
 			}
 
 			if(computer.getDiscontinued() != null) {
-				computerDto.setIntroduced(computer.getIntroduced().toString());
+				computerDto.setDiscontinued(computer.getDiscontinued().format(DateTimeFormatter.ISO_DATE));
 			}
 
 			computerDto.setCompany(companyDto);
@@ -82,5 +84,20 @@ public class ComputerMapper {
 
 		return computer;
 	}
+	
+	static public List<ComputerDto> getComputerDtoList(Page<Computer> computerList){
+		List<ComputerDto> dtoList = computerList.stream()
+				.map((Computer computer)-> {
+					try {
+						return ComputerMapper.ComputerToDto(computer);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					return null;
+				})
+				.collect(Collectors.toList());
+		return dtoList;
+	}
+
 	
 }

@@ -123,7 +123,7 @@
 					
 					<c:forEach var="i" begin="0" end="2">
 						<c:set var="decr" value="${2-i}"></c:set>
-						<c:if test="${currentPage - decr > 1 }">
+						<c:if test="${currentPage - decr > 0 }">
 							<li>
 							<a href="dashboard?currentPage=${currentPage - decr}&search=${filter}&columnOrder=${columnOrder}">
 								<c:out value="${currentPage- decr}"></c:out>
