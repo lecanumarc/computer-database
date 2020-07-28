@@ -1,5 +1,7 @@
 package com.excilys.formation.cdb.daos;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +13,6 @@ import com.excilys.formation.cdb.models.Computer;
 public interface ComputerRepository extends JpaRepository<Computer, Long>{
 
 	Page<Computer> findByNameContaining(String string, Pageable page);
+	List<Computer> findAllByCompanyId(long id);
 	
 }

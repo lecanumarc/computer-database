@@ -1,14 +1,16 @@
 package com.excilys.formation.cdb.configuration;
 
-import javax.persistence.EntityManagerFactory;
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -29,29 +31,35 @@ public class SpringConfig {
 	}
 
 	@Bean
-	public EntityManagerFactory entityManagerFactory() {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+		entityManagerFactoryBean.setDataSource(hikariDataSource());
+		entityManagerFactoryBean.setPackagesToScan(new String[] { "com.excilys.formation.cdb.models"});
 
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setGenerateDdl(true);
+		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+		entityManagerFactoryBean.setJpaProperties(additionalProperties());
 
-		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan("com.excilys.formation.cdb.models");
-		factory.setDataSource(hikariDataSource());
-		factory.afterPropertiesSet();
-
-		return factory.getObject();
+		return entityManagerFactoryBean;
 	}
 
 	@Bean
-	public NamedParameterJdbcTemplate jdbcTemplate(DataSource hikariDataSource){
-		return new NamedParameterJdbcTemplate(hikariDataSource);
+	public PlatformTransactionManager transactionManager() {
+	    JpaTransactionManager transactionManager = new JpaTransactionManager();
+	    transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+	    return transactionManager;
+	}
+	 
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+	    return new PersistenceExceptionTranslationPostProcessor();
+	}
+	 
+
+	Properties additionalProperties() {
+		Properties properties = new Properties();
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+		return properties;
 	}
 
-	@Bean
-	public PlatformTransactionManager transactionManager(DataSource hikariDataSource) {
-		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
-		dataSourceTransactionManager.setDataSource(hikariDataSource);
-		return dataSourceTransactionManager;
-	}
 }

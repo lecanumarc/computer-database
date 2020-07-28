@@ -1,20 +1,19 @@
 package com.excilys.formation.cdb.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.models.Computer.ComputerBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestMain {
 
+	static CompanyDaoProvider companyDaoProvider; 
+	static ComputerDaoProvider computerDaoProvider; 
+
+	@Autowired
+	public TestMain(ComputerDaoProvider computerDaoProvider, CompanyDaoProvider companyDaoProvider) {
+		this.computerDaoProvider = computerDaoProvider;
+		this.companyDaoProvider = companyDaoProvider;
+	}
 	public static void main(String[] args) throws Exception {
-		//		Logger logger = LoggerFactory.getLogger(TestMain.class);
-		//		logger.debug("msg de debogage");
-		//		logger.info("msg d'information");
-		//		logger.warn("msg d'avertissement");
-		//		logger.error("msg d'erreur");
-		//		Session session = new Session();
-		//		session.run();
+		System.out.println("begin");
+		System.out.println("end");
 	}	
 }

@@ -3,6 +3,7 @@ package com.excilys.formation.cdb.services;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,36 +16,39 @@ import com.excilys.formation.cdb.models.Company;
 @Service
 @Transactional
 public class CompanyDaoProvider {
-
-	public CompanyRepository instanceDAO;
+	public CompanyRepository companyDao;
 
 	@Autowired
 	public CompanyDaoProvider(CompanyRepository companyDao) {
-		this.instanceDAO = companyDao;
+		this.companyDao = companyDao;
 	}
 
-	public Company add(Company obj) {
-		return instanceDAO.save(obj);
+	public void add(Company obj) {
+		companyDao.save(obj);
 	}
 
-	public Company edit(Company obj) {
-		return instanceDAO.save(obj);
+	public void edit(Company obj) {
+		companyDao.save(obj);
+	}
+
+	public void delete(long id) {
+		companyDao.deleteById(id);
 	}
 
 	public Optional<Company> findById(Long id) {
-		return instanceDAO.findById(id);
+		return companyDao.findById(id);
 	}
 
 	public int getNumberRows() {
-		return (int) instanceDAO.count();
+		return (int) companyDao.count();
 	}
 
 	public Page<Company> listByPage(int offset, int rows) {
-		return instanceDAO.findAll(PageRequest.of(offset, rows));
+		return companyDao.findAll(PageRequest.of(offset, rows));
 	}
 
 	public List<Company> listCompanies() {
-		return instanceDAO.findAll();
+		return companyDao.findAll();
 	}
 
 }

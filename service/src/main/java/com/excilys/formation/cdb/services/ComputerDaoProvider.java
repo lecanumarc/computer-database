@@ -1,9 +1,7 @@
 package com.excilys.formation.cdb.services;
 
+import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,50 +15,43 @@ import com.excilys.formation.cdb.models.Computer;
 @Service
 public class ComputerDaoProvider {
 
-	public ComputerRepository instanceDAO;
-	private EntityManagerFactory emf;
-	private EntityManager em;
+	public ComputerRepository computerDao;
 
 	@Autowired
-	public ComputerDaoProvider(ComputerRepository computerDao, EntityManagerFactory emf) {
-		this.instanceDAO = computerDao;
-		this.emf = emf;
-		this.em = emf.createEntityManager();
+	public ComputerDaoProvider(ComputerRepository computerDao) {
+		this.computerDao = computerDao;
 	}
 
-	public void add(Computer obj) {
-		em.getTransaction().begin();
-		em.persist(obj);
-		em.getTransaction().commit();
+	public Computer add(Computer obj) {
+		return computerDao.save(obj);
 	}
 
 	public void delete(long id) {
-		Computer computer =  em.find(Computer.class, id);
-		em.getTransaction().begin();
-		em.remove(computer);
-		em.getTransaction().commit();
+		computerDao.deleteById(id);
 	}
 
-	public void edit(Computer obj) {
-		em.getTransaction().begin();
-		em.merge(obj);
-		em.getTransaction().commit();
+	public Computer edit(Computer obj) {
+		return computerDao.save(obj);
 	}
 
 	public Optional<Computer> findById(long id) {
-		return instanceDAO.findById(id);
+		return computerDao.findById(id);
+	}
+	
+	public List<Computer> listByCompanyId(long id) {
+		return computerDao.findAllByCompanyId(id);
 	}
 
 	public int getNumberRows() {
-		return (int) instanceDAO.count();
+		return (int) computerDao.count();
 	}
 
 	public Page<Computer> listByPage(int index, int rows) {
-		return instanceDAO.findAll(PageRequest.of(index, rows));
+		return computerDao.findAll(PageRequest.of(index, rows));
 	}
 
 	public Page<Computer> listOrderedAndFiltered(int index, int rows, String filter, String column, boolean ascOrder) {
-		return instanceDAO.findByNameContaining(filter, PageRequest.of(index, rows , sortBy(column, ascOrder)));
+		return computerDao.findByNameContaining(filter, PageRequest.of(index, rows , sortBy(column, ascOrder)));
 	}
 
 	private Sort sortBy(String column, boolean ascOrder) {
@@ -71,11 +62,11 @@ public class ComputerDaoProvider {
 	}
 
 	public Page<Computer> listOrdered(int index, int rows, String column, boolean ascOrder) {
-		return instanceDAO.findAll(PageRequest.of(index, rows , sortBy(column, ascOrder)));
+		return computerDao.findAll(PageRequest.of(index, rows , sortBy(column, ascOrder)));
 	}
 
 	public Page<Computer> listFiltered(int index, int rows, String filter) {
-		return instanceDAO.findByNameContaining(filter, PageRequest.of(index, rows));
+		return computerDao.findByNameContaining(filter, PageRequest.of(index, rows));
 	}
 
 }

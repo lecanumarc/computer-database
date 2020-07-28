@@ -21,28 +21,24 @@ import com.excilys.formation.cdb.services.ComputerDaoProvider;
 @RequestMapping({"/company"})
 public class TestController {
 
-//	private static Logger logger = LoggerFactory.getLogger(EditComputerController.class);
+	//	private static Logger logger = LoggerFactory.getLogger(EditComputerController.class);
 
 	CompanyDaoProvider companyDaoProvider; 
 	ComputerDaoProvider computerDaoProvider; 
-	CompanyRepository instanceDAO;
 
 	@Autowired
-	public TestController(CompanyRepository instanceDAO, ComputerDaoProvider computerDaoProvider, CompanyDaoProvider companyDaoProvider) {
+	public TestController(ComputerDaoProvider computerDaoProvider, CompanyDaoProvider companyDaoProvider) {
 		this.computerDaoProvider = computerDaoProvider;
 		this.companyDaoProvider = companyDaoProvider;
-		this.instanceDAO = instanceDAO;
 	}
 
 	@GetMapping
 	public String TestGet(@RequestParam(value="id") Long id,
 			ModelMap dataMap) {
-		Page<Computer> computerList = computerDaoProvider.listByPage(1, 20);
-		List<ComputerDto> dtoList = ComputerMapper.getComputerDtoList(computerList);
-		for(ComputerDto dto : dtoList) {
-			System.out.println(dto);
-		}
-		dataMap.addAttribute("computerList", dtoList);
+		List<Computer> computerList = computerDaoProvider.listByCompanyId(id);
+		companyDaoProvider.findById(id);
+		System.out.println(companyDaoProvider.findById(id).get());
+		dataMap.addAttribute("computerList", computerList);
 		return "company";
 
 	}
