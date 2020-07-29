@@ -47,7 +47,6 @@
 			<artifactId>spring-data-commons</artifactId>
 			<version>${spring-data-commons-version}</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

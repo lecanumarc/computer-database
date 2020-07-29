@@ -82,6 +82,6 @@
 		<module>binding</module>
 		<module>console</module>
 		<module>webapp</module>
-	  <module>api</module>
+    <module>api</module>
   </modules>
 </project>
