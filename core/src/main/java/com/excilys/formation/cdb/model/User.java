@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.models;
+package com.excilys.formation.cdb.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.exceptions;
+package com.excilys.formation.cdb.exception;
 
 public class ComputerValidatorException extends RuntimeException {
 

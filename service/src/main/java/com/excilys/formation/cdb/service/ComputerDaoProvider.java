@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.excilys.formation.cdb.daos.ComputerRepository;
-import com.excilys.formation.cdb.models.Computer;
+import com.excilys.formation.cdb.dao.ComputerRepository;
+import com.excilys.formation.cdb.model.Computer;
 
 @Service
 public class ComputerDaoProvider {

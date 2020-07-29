@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.excilys.formation.cdb.daos.UserRepository;
-import com.excilys.formation.cdb.models.User;
+import com.excilys.formation.cdb.dao.UserRepository;
+import com.excilys.formation.cdb.model.User;
 
 public class UserDaoProvider implements UserDetailsService {
 

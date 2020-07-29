@@ -5,9 +5,9 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.models.Computer.ComputerBuilder;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.model.Computer.ComputerBuilder;
 
 public class ComputerRowMapper implements RowMapper<Computer> {
 	@Override

@@ -1,8 +1,8 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.tools.Menu;
-import com.excilys.formation.cdb.tools.Page;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.tool.Menu;
+import com.excilys.formation.cdb.tool.Page;
 
 public class Session {
 

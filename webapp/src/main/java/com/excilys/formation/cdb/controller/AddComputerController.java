@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.controllers;
+package com.excilys.formation.cdb.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
 import com.excilys.formation.cdb.mapper.CompanyMapper;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.services.CompanyDaoProvider;
-import com.excilys.formation.cdb.services.ComputerDaoProvider;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.service.CompanyDaoProvider;
+import com.excilys.formation.cdb.service.ComputerDaoProvider;
 
 @Controller
 @RequestMapping("/addComputer")

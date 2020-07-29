@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.controllers;
+package com.excilys.formation.cdb.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.cdb.dto.ComputerDto;
 import com.excilys.formation.cdb.mapper.ComputerMapper;
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.services.ComputerDaoProvider;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.service.ComputerDaoProvider;
 
 @Controller
 @RequestMapping({"/", "/dashboard"})

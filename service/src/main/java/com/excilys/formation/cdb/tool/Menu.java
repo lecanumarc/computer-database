@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.tools;
+package com.excilys.formation.cdb.tool;
 
 public class Menu {
 

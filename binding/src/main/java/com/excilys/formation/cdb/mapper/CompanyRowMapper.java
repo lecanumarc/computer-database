@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Company.CompanyBuilder;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Company.CompanyBuilder;
 
 public class CompanyRowMapper implements RowMapper<Company> {
 	@Override

@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Computer;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
 
 @Component
 public class UserCLI {

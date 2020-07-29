@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
 import com.excilys.formation.cdb.dto.ComputerDto;
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.models.Computer.ComputerBuilder;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.model.Computer.ComputerBuilder;
 
 public class ComputerMapper {
 

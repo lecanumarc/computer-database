@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cdb.dto.CompanyDto;
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Company.CompanyBuilder;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Company.CompanyBuilder;
 
 public class CompanyMapper {
 

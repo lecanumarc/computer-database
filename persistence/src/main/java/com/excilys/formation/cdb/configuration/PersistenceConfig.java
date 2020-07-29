@@ -21,9 +21,9 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages="com.excilys.formation.cdb")
-@EnableJpaRepositories(basePackages = "com.excilys.formation.cdb.daos")
-public class SpringConfig {
+@ComponentScan(basePackages="com.excilys.formation.cdb.dao")
+@EnableJpaRepositories(basePackages = "com.excilys.formation.cdb.dao")
+public class PersistenceConfig {
 
 	@Bean
 	public DataSource hikariDataSource() {
@@ -34,7 +34,7 @@ public class SpringConfig {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(hikariDataSource());
-		entityManagerFactoryBean.setPackagesToScan(new String[] { "com.excilys.formation.cdb.models"});
+		entityManagerFactoryBean.setPackagesToScan(new String[] { "com.excilys.formation.cdb.model"});
 
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);

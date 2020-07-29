@@ -1,13 +1,13 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import com.excilys.formation.cdb.models.Company;
-import com.excilys.formation.cdb.models.Computer;
-import com.excilys.formation.cdb.models.Computer.ComputerBuilder;
+import com.excilys.formation.cdb.model.Company;
+import com.excilys.formation.cdb.model.Computer;
+import com.excilys.formation.cdb.model.Computer.ComputerBuilder;
 
 public class UserScanner {
 	private static Scanner scanner;

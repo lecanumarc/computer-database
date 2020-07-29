@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.tools;
+package com.excilys.formation.cdb.tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class Page {

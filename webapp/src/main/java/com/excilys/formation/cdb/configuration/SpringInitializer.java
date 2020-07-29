@@ -12,7 +12,7 @@ public class SpringInitializer implements WebApplicationInitializer {
 
     public void onStartup(ServletContext container) throws ServletException {
 		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-		context.register(WebConfig.class, SpringInitializer.class, SpringConfig.class);
+		context.register(PersistenceConfig.class, ServiceConfig.class, WebConfig.class, SpringInitializer.class);
 		context.setServletContext(container);
 		ServletRegistration.Dynamic servlet = container.addServlet("dispatcher", new DispatcherServlet(context));
 		servlet.setLoadOnStartup(1);

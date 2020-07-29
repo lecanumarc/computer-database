@@ -1,4 +1,4 @@
-package com.excilys.formation.cdb.services;
+package com.excilys.formation.cdb.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

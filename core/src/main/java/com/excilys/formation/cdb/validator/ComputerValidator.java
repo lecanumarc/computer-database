@@ -1,7 +1,7 @@
 package com.excilys.formation.cdb.validator;
 
-import com.excilys.formation.cdb.exceptions.ComputerValidatorException;
-import com.excilys.formation.cdb.models.Computer;
+import com.excilys.formation.cdb.exception.ComputerValidatorException;
+import com.excilys.formation.cdb.model.Computer;
 
 public class ComputerValidator {
 
