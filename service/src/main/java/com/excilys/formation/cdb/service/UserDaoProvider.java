@@ -9,10 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.cdb.dao.UserRepository;
 import com.excilys.formation.cdb.model.User;
 
+@Service
+@Transactional
 public class UserDaoProvider implements UserDetailsService {
 
 	public UserRepository userDao;
@@ -59,10 +63,16 @@ public class UserDaoProvider implements UserDetailsService {
 					.password(user.get().getPassword())
 					.roles(user.get().getRole().getName())
 					.build();
-		}else {
+		} else {
 
 			throw new UsernameNotFoundException("username not found");
 		}
 	}
+	
+//	private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
+//        String[] userRoles = user.getRole().stream().map((role) -> role.getName()).toArray(String[]::new);
+//        Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
+//        return authorities;
+//	}
 
 }
