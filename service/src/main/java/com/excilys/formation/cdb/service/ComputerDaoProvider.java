@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.excilys.formation.cdb.dao.ComputerRepository;
+import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.model.Computer;
 
 @Service
@@ -67,6 +68,10 @@ public class ComputerDaoProvider {
 
 	public Page<Computer> listFiltered(int index, int rows, String filter) {
 		return computerDao.findByNameContaining(filter, PageRequest.of(index, rows));
+	}
+
+	public List<Computer> listComputers() {
+		return computerDao.findAll();
 	}
 
 }

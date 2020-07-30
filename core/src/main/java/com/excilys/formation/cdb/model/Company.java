@@ -41,6 +41,10 @@ public class Company {
 			this.name = name;
 		}
 	}
+	
+	public void setId(long id) {
+		this.id= id;
+	}
 
 	public static class CompanyBuilder{
 		private Long id;

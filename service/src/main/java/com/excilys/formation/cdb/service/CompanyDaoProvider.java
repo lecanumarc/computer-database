@@ -39,12 +39,8 @@ public class CompanyDaoProvider {
 		return companyDao.findById(id);
 	}
 
-	public int getNumberRows() {
-		return (int) companyDao.count();
-	}
-
-	public Page<Company> listByPage(int offset, int rows) {
-		return companyDao.findAll(PageRequest.of(offset, rows));
+	public Page<Company> listByPage(int index, int rows) {
+		return companyDao.findAll(PageRequest.of(index, rows));
 	}
 
 	public List<Company> listCompanies() {
