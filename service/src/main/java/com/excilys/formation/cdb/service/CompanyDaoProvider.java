@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,17 @@ public class CompanyDaoProvider {
 
 	public Page<Company> listByPage(int index, int rows) {
 		return companyDao.findAll(PageRequest.of(index, rows));
+	}
+	
+	public Page<Company> listOrderedAndFiltered(int index, int rows, String filter, String column, boolean ascOrder) {
+		return companyDao.findByNameContaining(filter, PageRequest.of(index, rows , sortBy(column, ascOrder)));
+	}
+
+	private Sort sortBy(String column, boolean ascOrder) {
+		if(ascOrder) {
+			return Sort.by(column).ascending();
+		}
+		return Sort.by(column).descending();
 	}
 
 	public List<Company> listCompanies() {

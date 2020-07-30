@@ -26,8 +26,8 @@ public class DashboardController {
 	private double maxPage = 1;	
 	private int pageIndex = 0;	
 	private long rowNumber = 0;
-	private String filter = null;
-	private String column = null;
+	private String filter = "";
+	private String column = "id";
 	private boolean ascOrder = false;
 	private Page<Computer> computerList = null;
 	private List<ComputerDto> computerDtoList = null;
@@ -64,19 +64,7 @@ public class DashboardController {
 			setOrder(columnOrder, model);
 		}
 
-		if(filter != null) {
-			if(column != null) {
-				computerList = computerDaoProvider.listOrderedAndFiltered(pageIndex, queryNb, filter, column, ascOrder);
-			} else {
-				computerList = computerDaoProvider.listFiltered(pageIndex,  queryNb, filter);
-			}
-		} else {
-			if(column != null) {
-				computerList = computerDaoProvider.listOrdered(pageIndex, queryNb, column, ascOrder);
-			} else {
-				computerList = computerDaoProvider.listByPage(pageIndex, queryNb);
-			}
-		}
+		computerList = computerDaoProvider.listOrderedAndFiltered(pageIndex, queryNb, filter, column, ascOrder);
 
 		computerDtoList = ComputerMapper.getComputerDtoList(computerList);
 		maxPage = computerList.getTotalPages();
@@ -87,10 +75,7 @@ public class DashboardController {
 
 		model.addAttribute("computerList", computerDtoList);
 		model.addAttribute("rowNumber", rowNumber);
-		if(filter != null) {
-			model.addAttribute("filter", filter);
-		}
-
+		model.addAttribute("filter", filter);
 		return "dashboard";
 	}
 

@@ -1,6 +1,8 @@
 package com.excilys.formation.cdb.tool;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 public class Page {
 
 	/*
@@ -8,16 +10,16 @@ public class Page {
 	 */
 	final Logger logger = LoggerFactory.getLogger(Page.class);
 	private String title;
-	private int number;
+	private int index;
 	private String content; // content by lines
 	
 	public Page() {
 	}
 	
-	public Page(String title, int number, String content) {
+	public Page(String title, int index, String content) {
 		super();
 		this.title = title;
-		this.number = number;
+		this.index = index;
 		this.content = content;
 	}
 
@@ -29,12 +31,12 @@ public class Page {
 		this.title = title;
 	}
 
-	public int getNumber() {
-		return number;
+	public int getindex() {
+		return index;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setindex(int index) {
+		this.index = index;
 	}
 
 	public String getContent() {
@@ -52,13 +54,12 @@ public class Page {
 	public void presentPage() {
 		logger.info("\n ------ " + this.getTitle() +" ------");
 		logger.info(this.content);
-		logger.info("------ "+this.number + " ------ ");
-		logger.info(this.content);
+		logger.info("------ "+this.index + " ------ ");
 	}
 
 	@Override
 	public String toString() {
-		return "Page [title=" + title + ", number=" + number + "]";
+		return "Page [title=" + title + ", index=" + index + "]";
 	}
 	
 }

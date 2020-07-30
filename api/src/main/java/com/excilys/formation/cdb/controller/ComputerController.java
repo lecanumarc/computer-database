@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.formation.cdb.model.Computer;
@@ -44,9 +45,15 @@ public class ComputerController {
 		return new ResponseEntity<List<Computer>>(list, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "page/{index}/{rows}")
-	public ResponseEntity<List<Computer>> getComputerPage(@PathVariable("index") int index, @PathVariable("rows") int rows) {
-		Page<Computer> computers = computerDaoProvider.listByPage(index, rows);
+	@GetMapping(value = "page")
+	public ResponseEntity<List<Computer>> getComputerPage(
+			@RequestParam(name="index", required = true) int index,
+			@RequestParam(name="rows", required = true) int rows,
+			@RequestParam(name="filter", required = false, defaultValue = "") String filter,
+			@RequestParam(name="column", required = false, defaultValue = "id") String column,
+			@RequestParam(name="ascOrder" , required = false, defaultValue = "true") boolean ascOrder
+			) {
+		Page<Computer> computers = computerDaoProvider.listOrderedAndFiltered(index, rows, filter, column, ascOrder);
 		return new ResponseEntity<List<Computer>>(computers.getContent(), HttpStatus.OK);
 	}
 
@@ -55,7 +62,7 @@ public class ComputerController {
 		computerDaoProvider.delete(id);
 		return new ResponseEntity<Computer>(HttpStatus.OK);
 	}
-	
+
 	@PostMapping(value = "/add", consumes  = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Computer> updateComputer(@RequestBody Computer computer) {
 		computerDaoProvider.add(computer);

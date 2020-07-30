@@ -61,14 +61,7 @@ public class ComputerDaoProvider {
 		}
 		return Sort.by(column).descending();
 	}
-
-	public Page<Computer> listOrdered(int index, int rows, String column, boolean ascOrder) {
-		return computerDao.findAll(PageRequest.of(index, rows , sortBy(column, ascOrder)));
-	}
-
-	public Page<Computer> listFiltered(int index, int rows, String filter) {
-		return computerDao.findByNameContaining(filter, PageRequest.of(index, rows));
-	}
+	
 
 	public List<Computer> listComputers() {
 		return computerDao.findAll();

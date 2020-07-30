@@ -98,6 +98,20 @@ public class ComputerMapper {
 				.collect(Collectors.toList());
 		return dtoList;
 	}
-
+	
+	static public List<ComputerDto> getComputerDtoList(List<Computer> computerList){
+		List<ComputerDto> dtoList = computerList.stream()
+				.map((Computer computer)-> {
+					try {
+						return ComputerMapper.ComputerToDto(computer);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					return null;
+				})
+				.collect(Collectors.toList());
+		return dtoList;
+	}
+	
 	
 }

@@ -1,6 +1,5 @@
 package com.excilys.formation.cdb.controller;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excilys.formation.cdb.model.Company;
@@ -43,6 +43,18 @@ public class CompanyController {
 	public ResponseEntity<List<Company>> getCompanyPage(@PathVariable("index") int index, @PathVariable("rows") int rows) {
 		System.out.println("page");
 		Page<Company> companies = companyDaoProvider.listByPage(index, rows);
+		return new ResponseEntity<List<Company>>(companies.getContent(), HttpStatus.OK);
+	}
+
+	@GetMapping(value = "page")
+	public ResponseEntity<List<Company>> getCompanyPage(
+			@RequestParam(name="index", required = true) int index,
+			@RequestParam(name="rows", required = true) int rows,
+			@RequestParam(name="filter", required = false, defaultValue = "") String filter,
+			@RequestParam(name="column", required = false, defaultValue = "id") String column,
+			@RequestParam(name="ascOrder" , required = false, defaultValue = "true") boolean ascOrder
+			) {
+		Page<Company> companies = companyDaoProvider.listOrderedAndFiltered(index, rows, filter, column, ascOrder);
 		return new ResponseEntity<List<Company>>(companies.getContent(), HttpStatus.OK);
 	}
 
