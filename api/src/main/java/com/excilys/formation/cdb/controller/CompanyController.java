@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excilys.formation.cdb.model.Company;
 import com.excilys.formation.cdb.service.CompanyDaoProvider;
 
+@CrossOrigin
 @RestController
 @RequestMapping({"/company"})
 public class CompanyController {
@@ -84,7 +86,7 @@ public class CompanyController {
 		return new ResponseEntity<Company>(HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/add", consumes  =  {"text/plain;charset=UTF-8", MediaType.APPLICATION_JSON_VALUE},  produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/add", consumes = {"text/plain;charset=UTF-8", MediaType.APPLICATION_JSON_VALUE},  produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Company> updateCompany(@RequestBody Company company) {
 		System.out.println(company);
 		companyDaoProvider.add(company);

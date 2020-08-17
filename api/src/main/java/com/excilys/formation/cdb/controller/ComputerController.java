@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excilys.formation.cdb.model.Computer;
 import com.excilys.formation.cdb.service.ComputerDaoProvider;
 
+@CrossOrigin
 @RestController
 @RequestMapping({"/computer"})
 public class ComputerController {
@@ -63,7 +64,7 @@ public class ComputerController {
 		return new ResponseEntity<Computer>(HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/add", consumes  = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/add", produces =  "application/json")
 	public ResponseEntity<Computer> updateComputer(@RequestBody Computer computer) {
 		computerDaoProvider.add(computer);
 		return new ResponseEntity<Computer>(HttpStatus.OK);
